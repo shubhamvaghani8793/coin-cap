@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
@@ -59,11 +60,11 @@ function Footer() {
           </p>
 
           <div className="flex justify-center mt-4 gap-4">
-            <a href="#" className="hover:text-white text-lg"><img src='x.svg' alt='' /></a>
-            <a href="#" className="hover:text-white text-lg"><img src='tiktok.svg' alt='' /></a>
-            <a href="#" className="hover:text-white text-lg"><img src='instagram.svg' alt='' /></a>
-            <a href="#" className="hover:text-white text-lg"><img src='youtube.png' alt='' /></a>
-          </div>
+            <Link to="https://x.com/Coincapconvert"><img src='x.svg' alt='' /></Link>
+            <Link to=""><img src='tiktok.svg' alt='' /></Link>
+            <Link to="https://www.instagram.com/coincapconvert/"><img src='instagram.svg' alt='' /></Link>
+            <Link to="www.youtube.com/@Coincapconvert"><img src='youtube.png' alt='' /></Link>
+            </div>
         </div>
       </div>
     </div>
