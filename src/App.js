@@ -3,18 +3,20 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar/Nabar'
 import Footer from './components/footer/Footer'
 import Home from './components/home/Home';
+import Converter from './components/converter/Converter';
 
 function App() {
   return (
-   <>
+    <>
       <BrowserRouter>
-          <Navbar />
+        <Navbar />
         <Routes>
-          <Route path='/' element={<Home/>}/>
+          <Route path='/' element={<Home />} />
+          <Route path='/converter' element={<Converter />} />
         </Routes>
-          <Footer />
+        <Footer />
       </BrowserRouter>
-   </>
+    </>
   );
 }
 
