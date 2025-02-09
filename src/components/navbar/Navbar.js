@@ -41,7 +41,7 @@ function Navbar() {
                 isActive ? "text-brandOrange" : ""
               }
             >
-              Converter
+              Goal tracker
             </NavLink>
           </div>
 

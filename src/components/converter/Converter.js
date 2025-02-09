@@ -2,6 +2,7 @@ import React from 'react'
 import ContactUs from '../contactus/ContactUs'
 import Navbar from '../navbar/Navbar'
 import { FaAngleDown } from "react-icons/fa6";
+import Footer from '../footer/Footer';
 
 const Converter = () => {
     return (
@@ -72,6 +73,7 @@ const Converter = () => {
                 </div>
             </div>
             <ContactUs />
+            <Footer />
         </>
     )
 }

@@ -14,6 +14,7 @@ import swapIcon from '../../assets/changeIcon.svg'
 import bitcoin_sm from '../../assets/bitcoin-sm.svg'
 import ProjectedGrowth from '../projectedGrowth/ProjectedGrowth'
 import Popular from '../popular/Popular'
+import Footer from '../footer/Footer'
 
 function Home() {
   return (
@@ -141,7 +142,7 @@ function Home() {
 
         {/* Popular Crypto Component */}
         <Popular />
-        
+        <Footer />
       </div>
     </>
   )

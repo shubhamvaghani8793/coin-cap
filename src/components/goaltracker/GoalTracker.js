@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from '../navbar/Navbar'
+import Footer from '../footer/Footer'
 
 const GoalTracker = () => {
   return (
@@ -14,7 +15,7 @@ const GoalTracker = () => {
         <p className='text-[25px] font-semibold lg:text-[65px] my-12'>Download the App</p>
         <p className='text-lg lg:text-2xl xl:text-[26px]'>Want to save this projection and monitor your investment goals?
           The goal tracker feature is exclusively available in the Coin Cap Convert app. Download now to set targets, track your portfolio, and plan your next move with ease.</p>
-        <div className='max-w-[350px] md:max-w-[550px] w-full flex justify-between mt-12 gap-10 '>
+        <div className='max-w-[350px] md:max-w-[550px] xl:max-w-[650px] w-full flex justify-between mt-12 gap-10 '>
           <img src='qr.svg' alt='qr' className='lg:ml-24' />
           <div className='flex flex-col gap-2'>
             <div className='w-[181px] p-3 rounded-xl flex items-center gap-5 bg-white py-2 md:py-3'>
@@ -38,6 +39,7 @@ const GoalTracker = () => {
         <img src='mobile.png' alt='mobile' className='h-full' />
       </div>
       </div>
+      <Footer />
     </>
   )
 }
