@@ -6,10 +6,10 @@ import { Link, NavLink } from 'react-router-dom'
 function Navbar() {
   return (
     <>
-      <nav className='w-ful bg-transparent z-10'>
+      <nav className='hidden md:block w-ful bg-transparent z-10 '>
         <div className='max-w-[1500px] mx-auto py-6 flex justify-between items-center px-4 gap-4'>
 
-          <Link to="/a" 
+          <Link to="/" 
             className='flex gap-1 items-center cursor-pointer'
           >
             <img className='h-10 w-10' src={logo} alt="logo" />
