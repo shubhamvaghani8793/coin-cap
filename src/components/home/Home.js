@@ -16,34 +16,36 @@ import ProjectedGrowth from '../projectedGrowth/ProjectedGrowth'
 import Popular from '../popular/Popular'
 import Footer from '../footer/Footer'
 import ContactUs from '../contactus/ContactUs'
+import Sidebar from '../sidebar/Sidebar'
 
 function Home() {
   return (
     <>
       <Navbar/>
+      <Sidebar />
 
       {/* blurry Element */}
       
       <div className='h-screen max-w-[1600px] mx-auto'>
-        <div className='blurryDot-sm absolute top-[-100px] -z-50'></div>
-
         {/* icons image */}
+          <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
+          <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
+
         <div className='relative -z-50'>
-        <div className='blurryDot-md absolute -right-36 top-10 -z-50'></div>
-          <img className='free-coin left-[70px] opacity-[0.8] lg:opacity-[1]' src={bitcoinIcon} alt="bitcoin" />
+          <img className='free-coin left-[70px] opacity-[0.3] sm:opacity-[0.8] lg:opacity-[1]' src={bitcoinIcon} alt="bitcoin" />
           <img className='absolute w-10 left-[170px] top-28 opacity-[0.8] lg:opacity-[1]' src={star_3} alt="bitcoin" />
           <img className='absolute w-14 -left-[20px] top-[40vh] opacity-[0.8] lg:opacity-[1]' src={coin_1} alt="coin-1" />
           <img className='absolute w-20 left-[60px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={coin_2} alt="coin-2" />
-          <img className='absolute w-16 -right-[30px] top-[30vh] opacity-[0.8] lg:opacity-[1]' src={coin_3} alt="coin-3" />
-          <img className='absolute w-20 -right-[30px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={etheriumIcon} alt="etheriumIcon" />
+          <img className='absolute w-16 sm:-right-[30px] right-[0px] top-[30vh] opacity-[0.8] lg:opacity-[1]' src={coin_3} alt="coin-3" />
+          <img className='absolute w-20 sm:-right-[2  0px] right-[0px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={etheriumIcon} alt="etheriumIcon" />
           <img className='absolute w-20 right-[100px] top-[100px] opacity-[0.8] lg:opacity-[1]' src={coin_4} alt="coin-4" />
           <img className='absolute w-10 right-[190px] top-[50px] opacity-[0.8] lg:opacity-[1]' src={star_2} alt="star_2" />
           <img className='absolute right-[200px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={star_3} alt="star_3" />
-          <img className='absolute w-16 right-[240px] top-[10px] opacity-[0.8] lg:opacity-[1]' src={star_1} alt="star_3" />
+          <img className='absolute w-16 right-[240px] top-[10px] hidden sm:block opacity-[0.8] lg:opacity-[1]' src={star_1} alt="star_3" />
         </div>
 
         <section className='flex flex-col max-w-[1400px] mx-auto items-center px-3'>
-          <h1 className='text-7xl font-semibold max-w-2xl text-center mt-8 transition'>
+          <h1 className='text-3xl sm:text-5xl md:text-7xl font-semibold max-w-2xl text-center mt-8 transition'>
             Crypto <span className='text-brandOrange'>Market cap</span> Calculator
           </h1>
 
@@ -57,7 +59,7 @@ function Home() {
                 <option value="eur">EUR</option>
             </select>
 
-            <div className='flex gap-3 justify-center gap-7  w-full mt-6'>
+            <div className='flex justify-center gap-7  w-full mt-6'>
               <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
                 <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
@@ -90,7 +92,7 @@ function Home() {
             <hr className='border border-[#ffffff50] my-6 w-[95%]'/>
             
             <section className='text-center'>   
-              <p className='text-4xl font-semibold '>
+              <p className='text-xl sm:text-4xl font-semibold '>
                 <span className='uppercase'> eth </span> 
                   with the market cap of 
                 <span className='uppercase'> btc </span>
@@ -98,7 +100,7 @@ function Home() {
 
               <div className='flex justify-center items-center gap-4 mt-3'>
                 <img src={bitcoin_sm} alt="icon" />
-                <p className='text-2xl'>400 B <span className='text-[#0dc71c] font-bold'> {`(5.15x)`} </span></p>
+                <p className='text-md sm:text-2xl'>400 B <span className='text-[#0dc71c] font-bold'> {`(5.15x)`} </span></p>
               </div>
 
               <p className='mt-2'>
@@ -117,7 +119,7 @@ function Home() {
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
                   <img src={bitcoin_sm} alt="icon" />
-                    <p className='text-lg'>$ 23,434234.00 
+                    <p className='text-sm sm:text-lg'>$ 23,434234.00 
                       <span className='text-[#F67611]'> {`(5.15x)`} </span>
                     </p>
                 </div>
@@ -129,7 +131,7 @@ function Home() {
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
                   <img src={bitcoin_sm} alt="icon" />
-                    <p className='text-lg'>$ 23,434234.00 
+                    <p className='text-sm sm:text-lg'>$ 23,434234.00 
                       <span className='text-[#0dc71c]'> {`(5.15x)`} </span>
                     </p>
                 </div>

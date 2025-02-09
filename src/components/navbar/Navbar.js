@@ -7,33 +7,17 @@ import { RiMenu2Fill } from 'react-icons/ri'
 function Navbar() {
   return (
     <>
-      <nav className='w-ful bg-transparent z-30'>
+      <nav className='hidden md:block w-ful bg-transparent z-10 '>
         <div className='max-w-[1500px] mx-auto py-6 flex justify-between items-center px-4 gap-4'>
 
           <Link to="/" 
-            className='hidden  gap-1 items-center cursor-pointer md:flex'
+            className='flex gap-1 items-center cursor-pointer'
           >
             <img className='h-10 w-10' src={logo} alt="logo" />
             <h2 className='font-bold text-lg'>
               <span className='text-brandOrange'>Coin Cap</span> Converter
             </h2>
           </Link>
-
-            {/* Menu */}
-            <div className='md:hidden contents cursor-pointer'>
-              <RiMenu2Fill className='w-6 h-6' />
-            </div>
-
-
-            {/* Mobile logo */}
-            <Link to="/" 
-              className='flex gap-1 items-center cursor-pointer md:hidden text-sm'
-            >
-              <img className='h-7 w-7' src={logo} alt="logo" />
-              <h2 className='font-bold text-sm'>
-                <span className='text-brandOrange '>Coin Cap</span> Converter
-              </h2>
-            </Link>
 
           <div className='md:flex gap-4 md:gap-8 md:mr-16 hidden'>
             <NavLink 
