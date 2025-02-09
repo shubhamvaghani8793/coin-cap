@@ -48,8 +48,8 @@ function Navbar() {
           <div className='flex gap-1 items-center'>
             <img className='w-4 h-4' src={languageIcon} alt="language" />
             <select name="" className='text-white outline-none bg-transparent text-sm cursor-pointer w-12'>
-              <option value="en" className='text-black text-xs'>EN</option>
-              <option value="fr" className='text-black text-xs'>FR</option>
+              <option value="en" className='text-white lightGary'>EN</option>
+              <option value="fr" className='text-white lightGary'>FR</option>
             </select>
           </div>
         </div>
