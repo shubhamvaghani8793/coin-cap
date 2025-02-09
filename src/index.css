@@ -20,11 +20,20 @@ body{
   background-image: radial-gradient(closest-side, rgba(196, 65, 4, 0.281), #00000000);
 }
 
+.linearBtn{
+  @apply rounded-md;
+  background: linear-gradient(to right, #F77B18, #F84F0D)
+}
+
 .option-color{
   @apply bg-[#2e2e39];
   background-image: url('../src/assets/bottom-arrow.svg');
   background-repeat: no-repeat;
   background-position: 70px;
+}
+
+.lightGary{
+  @apply bg-[#2e2e39];
 }
 
 .free-coin{
@@ -56,4 +65,19 @@ body{
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #6d6969; /* Hover effect */
+}
+
+select{
+  cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
