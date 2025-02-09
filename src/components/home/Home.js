@@ -1,5 +1,4 @@
 import React from 'react'
-import Navbar from '../navbar/Navbar'
 import bitcoinIcon from '../../assets/Bitcoin-1.svg'
 import etheriumIcon from '../../assets/Etherium.svg'
 import star_1 from '../../assets/star-img.svg'
@@ -14,8 +13,6 @@ import usa_flag from '../../assets/usa-flag.svg'
 function Home() {
   return (
     <>
-      <Navbar/>
-
       {/* blurry Element */}
       
       <div className='h-screen max-w-[1500px] mx-auto'>
