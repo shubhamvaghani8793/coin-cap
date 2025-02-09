@@ -9,7 +9,7 @@ const Converter = () => {
             <Navbar />
             <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 md:h-auto' />
             <img src='converterbg2.png' alt='' className='absolute top-52 right-0  w-[350px] h-[700px] md:top-0 md:h-[800px] md:w-auto' />
-            <div className='relative place-items-center mt-5 mx-5 md:mx-0 md:mt-20'>
+            <div className='place-items-center mt-5 mx-5 md:mx-0 md:mt-20'>
                 <div className='max-w-4xl w-full place-items-center'>
                     <p className='text-[30px] text-white text-center font-semibold max-w-[300px] w-full sm:max-w-[500px] sm:text-[40px] md:text-[75px] md:max-w-[800px]'>Crypto & <span className='bg-gradient-to-r from-[#F3510D] to-[#F67611] bg-clip-text text-transparent'>Currency</span> Converter</p>
                     <div className="border border-[#676767] w-full md:w-auto rounded-xl mx-2 py-6 px-4 mt-10 bg-transparent sm:px-6">
