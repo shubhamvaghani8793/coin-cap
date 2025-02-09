@@ -15,6 +15,7 @@ import bitcoin_sm from '../../assets/bitcoin-sm.svg'
 import ProjectedGrowth from '../projectedGrowth/ProjectedGrowth'
 import Popular from '../popular/Popular'
 import Footer from '../footer/Footer'
+import ContactUs from '../contactus/ContactUs'
 
 function Home() {
   return (
@@ -23,22 +24,22 @@ function Home() {
 
       {/* blurry Element */}
       
-      <div className='h-screen max-w-[1500px] mx-auto'>
+      <div className='h-screen max-w-[1600px] mx-auto'>
         <div className='blurryDot-sm absolute top-[-100px] -z-50'></div>
 
         {/* icons image */}
         <div className='relative -z-50'>
         <div className='blurryDot-md absolute -right-36 top-10 -z-50'></div>
-          <img className='free-coin left-[70px]' src={bitcoinIcon} alt="bitcoin" />
-          <img className='absolute w-10 left-[170px] top-28' src={star_3} alt="bitcoin" />
-          <img className='absolute w-14 -left-[20px] top-[40vh]' src={coin_1} alt="coin-1" />
-          <img className='absolute w-20 left-[60px] top-[60vh]' src={coin_2} alt="coin-2" />
-          <img className='absolute w-16 -right-[30px] top-[30vh]' src={coin_3} alt="coin-3" />
-          <img className='absolute w-20 -right-[30px] top-[60vh]' src={etheriumIcon} alt="etheriumIcon" />
-          <img className='absolute w-20 right-[100px] top-[100px]' src={coin_4} alt="coin-4" />
-          <img className='absolute w-10 right-[190px] top-[50px]' src={star_2} alt="star_2" />
-          <img className='absolute right-[200px] top-[60vh]' src={star_3} alt="star_3" />
-          <img className='absolute w-16 right-[240px] top-[10px]' src={star_1} alt="star_3" />
+          <img className='free-coin left-[70px] opacity-[0.8] lg:opacity-[1]' src={bitcoinIcon} alt="bitcoin" />
+          <img className='absolute w-10 left-[170px] top-28 opacity-[0.8] lg:opacity-[1]' src={star_3} alt="bitcoin" />
+          <img className='absolute w-14 -left-[20px] top-[40vh] opacity-[0.8] lg:opacity-[1]' src={coin_1} alt="coin-1" />
+          <img className='absolute w-20 left-[60px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={coin_2} alt="coin-2" />
+          <img className='absolute w-16 -right-[30px] top-[30vh] opacity-[0.8] lg:opacity-[1]' src={coin_3} alt="coin-3" />
+          <img className='absolute w-20 -right-[30px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={etheriumIcon} alt="etheriumIcon" />
+          <img className='absolute w-20 right-[100px] top-[100px] opacity-[0.8] lg:opacity-[1]' src={coin_4} alt="coin-4" />
+          <img className='absolute w-10 right-[190px] top-[50px] opacity-[0.8] lg:opacity-[1]' src={star_2} alt="star_2" />
+          <img className='absolute right-[200px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={star_3} alt="star_3" />
+          <img className='absolute w-16 right-[240px] top-[10px] opacity-[0.8] lg:opacity-[1]' src={star_1} alt="star_3" />
         </div>
 
         <section className='flex flex-col max-w-[1400px] mx-auto items-center px-3'>
@@ -142,6 +143,9 @@ function Home() {
 
         {/* Popular Crypto Component */}
         <Popular />
+
+        <ContactUs />
+
         <Footer />
       </div>
     </>
