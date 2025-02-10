@@ -5,7 +5,7 @@ const ContactUs = () => {
     return (
         <div className='relative mt-40'>
 
-            <img src='contactusbg.svg' alt='' className='absolute right-0 bottom-[-350px] h-[900px] w-[300px] z-[-10] sm:h-auto sm:w-auto ' />
+            <img src='contactusbg.svg' alt='' className='absolute right-0 bottom-[-350px] h-[900px] w-[300px] -z-50 sm:h-auto sm:w-auto ' />
             <div className='flex flex-col justify-between items-center px-4 mb-16 z-100 xl:px-32 gap-10 md:gap-5 md:flex-row sm:px-16'>
                 <div className='max-w-[350px] place-items-center'>
                     <p className='sm:text-left text-3xl text-white text-center font-semibold max-w-[800px] w-full lg:mx-w-[800px] lg:text-[50px] lg:leading-[50px]'>Get It On The <span className='bg-gradient-to-r from-[#F3510D] to-[#F67611] bg-clip-text text-transparent'>Crypto Action</span></p>

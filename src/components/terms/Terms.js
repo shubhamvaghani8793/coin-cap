@@ -11,7 +11,7 @@ const Terms = () => {
             <Sidebar />
             <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
             <img src='converterbg2.png' alt='' className='absolute top-52 right-0  w-[350px] h-[700px] -z-50 md:top-0 md:h-[800px] md:w-auto' />
-            <div className="text-white min-h-screen mt-20 p-6">
+            <div className="text-white min-h-screen pt-20 p-6">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-[30px] md:text-[75px] font-bold bg-gradient-to-r from-[#F3510D] to-[#F67611] bg-clip-text text-transparent">Terms & Conditions</h1>
                     <nav className="flex gap-4 text-sm md:text-xl md:gap-12 mt-2">
