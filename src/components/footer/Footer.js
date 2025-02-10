@@ -28,11 +28,8 @@ function Footer() {
           <div>
             <h3 className="text-white text-2xl font-bold">Help</h3>
             <ul className="mt-3 text-xs md:mt-6 md:text-sm md:gap-4 flex flex-col gap-2">
-              <li><a href="/" className=" hover:text-orange-500 md:text-[18px]">Cookies Policy</a></li>
-              <NavLink to="/terms">
-                <li><a href="/" className="hover:text-orange-500 md:text-[18px]">Terms & Conditions</a></li>
-              </NavLink>
-              <li><a href="/" className="hover:text-orange-500 md:text-[18px]">Privacy Policy</a></li>
+                <li><a href="/terms" className="hover:text-orange-500 md:text-[18px]">Terms & Conditions</a></li>
+              <li><a href="/privacypolicy" className="hover:text-orange-500 md:text-[18px]">Privacy Policy</a></li>
             </ul>
           </div>
 
