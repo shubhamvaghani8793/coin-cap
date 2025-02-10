@@ -2,7 +2,11 @@
  export default {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        brandOrange: '#F67611'
+      }
+    },
   },
   plugins: [],
 }

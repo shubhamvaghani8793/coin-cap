@@ -9,4 +9,75 @@
 
 body{
   box-sizing: border-box;
+  background-color: #06060e;
+  color: white;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.blurryDot-sm{
+  @apply h-[300px] w-[300px];
+  background-image: radial-gradient(closest-side, rgba(196, 65, 4, 0.281), #00000000);
+}
+
+.linearBtn{
+  @apply rounded-md;
+  background: linear-gradient(to right, #F77B18, #F84F0D)
+}
+
+.option-color{
+  @apply bg-[#2e2e39];
+  background-image: url('../src/assets/bottom-arrow.svg');
+  background-repeat: no-repeat;
+  background-position: 70px;
+}
+
+.lightGary{
+  @apply bg-[#2e2e39];
+}
+
+.free-coin{
+  @apply absolute w-24 h-24
+}
+
+.blurryDot-md{
+  @apply h-[350px] w-[350px];
+  background-image: radial-gradient(closest-side, rgba(222, 73, 3, 0.306), #00000000);
+}
+
+.blurryDot-lg{
+  @apply h-[500px] w-[500px];
+  background-image: radial-gradient(closest-side, rgba(196, 65, 4, 0.281), #00000000);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;  /* Scrollbar width */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1E1E1E; /* Track color */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #484545; /* Scrollbar handle */
+  border-radius: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6d6969; /* Hover effect */
+}
+
+select{
+  cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
