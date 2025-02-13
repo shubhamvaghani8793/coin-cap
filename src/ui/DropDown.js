@@ -52,6 +52,18 @@ export default function DropDown({options, selectedValue, onSelect, displayLable
           indicatorSeparator: () => ({
             display: "none",
           }),
+          menu: (provided) => ({
+            ...provided,
+            overflowX: 'hidden',  // Hide horizontal overflow
+          }),
+          menuList: (provided) => ({
+            overflowY: 'auto', 
+            maxHeight: '200px',  
+            scrollbarWidth: 'thin',
+            overflowX: 'hidden',  
+            msOverflowStyle: 'auto', 
+            WebkitOverflowScrolling: 'touch', 
+          })
         }}
       />
     </div>

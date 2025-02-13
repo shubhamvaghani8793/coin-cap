@@ -19,7 +19,8 @@ import ContactUs from '../contactus/ContactUs'
 import Sidebar from '../sidebar/Sidebar'
 import DropDown from '../../ui/DropDown'
 import { getCurrencyFlag } from '../../api/apiService'
-
+import { DummyCryptoData } from './db'
+ 
 // Currency options with flags
 const currencyOptions = [
   { value: "USD", img: "usa-flag.svg", label: "USA", code: "USD" },
@@ -29,6 +30,7 @@ const currencyOptions = [
   { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
 ];
 
+// crypto option data
 const cryptoOptions = [
   { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
   { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
@@ -37,10 +39,13 @@ const cryptoOptions = [
 ];
 
 function Home() {
+
   const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0]);
+
+  const [cryptoAllData, setCryptoAllData] = useState(null)
+
   const [selectedCrypto1, setSelectedCrypto1] = useState(cryptoOptions[0]);
   const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoOptions[1]);
-  console.log(selectedCurrency);
 
   // dummy data
   const data = {
@@ -88,6 +93,7 @@ function Home() {
   }
 
   const [currencyFlag, setCurrencyFlag] = useState();
+  const [cryptoData, setCryptoData] = useState(null);
 
   // get country currency Flag
   const getCurrency = async () => {
@@ -99,11 +105,29 @@ function Home() {
       console.log(error); 
     }
   }
+
+  const modifiedData = () => {
+    const newArray = DummyCryptoData?.data?.map((item) => {
+      const { id, name, quote, symbol } = item;
+      return {id, value: name, label: name, quote, code: symbol}
+    })
+
+    setCryptoAllData(newArray)
+  }
   
   useEffect(() => {
     // getCurrency()
+    modifiedData()
   },[])
+  // console.log(DummyCryptoData.data);
+  // console.log(cryptoAllData);
+  console.log(selectedCrypto1);
 
+  const handleSwap = () => {
+    setSelectedCrypto1(selectedCrypto2)
+    setSelectedCrypto2(selectedCrypto1)
+  }
+  
   return (
     <>
       <Navbar/>
@@ -153,20 +177,21 @@ function Home() {
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
                 </select> */}
+                
                 <DropDown
                   displayLable={true}
-                  options={cryptoOptions}
+                  options={cryptoAllData || cryptoOptions}
                   selectedValue={selectedCrypto1}
                   onSelect={setSelectedCrypto1} 
                 />
-                <p className='w-1/3 text-center '>$ 4.43</p>
+                <p className='w-1/3 text-center px-2'>{selectedCrypto1?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
               </div>
 
-              <button className='rotate-90 md:rotate-0'>
+              <button className='rotate-90 md:rotate-0' onClick={handleSwap}>
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
+              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
                 {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
@@ -177,11 +202,11 @@ function Home() {
                 </select> */}
                 <DropDown
                   displayLable={true}
-                  options={cryptoOptions}
+                  options={cryptoAllData || cryptoOptions}
                   selectedValue={selectedCrypto2}
                   onSelect={setSelectedCrypto2} 
                 />
-                <p className='w-1/3 text-center '>$ 4.43</p>
+                <p className='w-1/3 text-center px-2'>{selectedCrypto2?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
               </div>
             </div>
 
