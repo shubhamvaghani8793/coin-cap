@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../navbar/Navbar'
 import bitcoinIcon from '../../assets/Bitcoin-1.svg'
 import etheriumIcon from '../../assets/Etherium.svg'
@@ -17,8 +17,20 @@ import Popular from '../popular/Popular'
 import Footer from '../footer/Footer'
 import ContactUs from '../contactus/ContactUs'
 import Sidebar from '../sidebar/Sidebar'
+import DropDown from '../../ui/DropDown'
+
+// Currency options with flags
+const currencyOptions = [
+  { value: "USD", img: "bitcoin.svg", label: "USA", code: "USD" },
+  { value: "AED", img: "bitcoin.svg", label: "India", code: "AED" },
+  { value: "ARS", img: "bitcoin.svg", label: "Argentine", code: "ARS" },
+  { value: "AUD", img: "bitcoin.svg", label: "Australian", code: "AUD" },
+  { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
+];
 
 function Home() {
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  console.log(selectedCurrency);
   return (
     <>
       <Navbar/>
@@ -51,13 +63,10 @@ function Home() {
 
           <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9 backdrop-blur-[2px]'>   
            
-            <select className='outline-none option-color w-24 py-2 px-4 rounded-md appearance-none'
-              name="currency"
-            >
-                <option value="usd">USD</option>
-                <option value="inr">INR</option>
-                <option value="eur">EUR</option>
-            </select>
+            <DropDown
+            options={currencyOptions}
+            selectedValue={selectedCurrency}
+            onSelect={setSelectedCurrency} />
 
             <div className='flex justify-center gap-7  w-full mt-6'>
               <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
