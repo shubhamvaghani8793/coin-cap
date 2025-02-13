@@ -1,11 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ContactUs from '../contactus/ContactUs'
 import Navbar from '../navbar/Navbar'
 import { FaAngleDown } from "react-icons/fa6";
 import Footer from '../footer/Footer';
 import Sidebar from '../sidebar/Sidebar';
+import DropDown from '../../ui/DropDown';
+
+const cryptoOptions = [
+    { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
+    { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
+    { value: "BNB", img: "bitcoin.svg", label: "Solana", code: "BNB" },
+    { value: "XRP", img: "bitcoin.svg", label: "Tether", code: "XRP" },
+  ];
 
 const Converter = () => {
+
+    const [convertType, setConvertType] = useState(1);
+    const [selectedCrypto1, setSelectedCrypto1] = useState(cryptoOptions[0]);
+    const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoOptions[1]);
+
     return (
         <>
             <Navbar />
@@ -19,8 +32,12 @@ const Converter = () => {
                         <div className='place-items-center'>
                             {/* Dropdown */}
                             <div className="relative mb-4 flex justify-center w-full md:w-auto">
-                                <select className="bg-[#23232E] outline-none appearance-none text-white p-4 rounded-md w-full md:w-72 ">
+                                <select 
+                                    value={convertType}
+                                    className="bg-[#23232E] outline-none appearance-none text-white p-3 rounded-md w-full md:w-72 ">
                                     <option value="1">Crypto to Crypto</option>
+                                    <option value="2">Crypto to Currency</option>
+                                    <option value="3">Currency to Currency</option>
                                 </select>
 
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
@@ -31,29 +48,39 @@ const Converter = () => {
                             {/* Crypto Selection */}
                             <div className="mt-16 flex flex-col items-center md:flex-row gap-3 md:gap-0">
                                 {/* Ethereum Box */}
-                                <div className="flex items-center bg-[#23232E] w-full justify-between px-4 py-2 rounded-md gap-2">
+                                <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[125px] md:w-[225px] sm:w-auto'>
 
-                                        <img src="ethereum.svg" alt="Ethereum" className="h-5 w-5" />
-                                        <select className="bg-transparent outline-none w-24 text-white cursor-pointer sm:w-48">
-                                            <option style={{ backgroundColor: "#23232E", color: "white" }} value="usd">
-                                                Ethereum
-                                            </option>
-                                            <option style={{ backgroundColor: "#23232E", color: "white" }} value="usd">
-                                                Ethereum
-                                            </option>
-                                        </select>
+                                        <DropDown 
+                                            displayLable={true}
+                                            options={cryptoOptions}
+                                            selectedValue={selectedCrypto1}
+                                            onSelect={setSelectedCrypto1}
+                                        />
+                                    
                                     </div>
-                                    <input className='text-white bg-[#383848] rounded-lg w-20 py-2 pl-4 sm:w-28' placeholder='$3.600' />
+                                    <input 
+                                        className='text-white outline-none h-full bg-[#383848] rounded-lg w-20 pl-4 sm:w-28' 
+                                        placeholder='$3.600' 
+                                    />
                                 </div>
 
                                 {/* Swap Icon */}
                                 <img src="leftright.svg" alt="Ethereum" className="h-5 w-5 mx-5 rotate-90 md:rotate-0" />
 
                                 {/* Bitcoin Box */}
-                                <div className="flex items-center bg-[#23232E] w-full justify-between px-4 py-2 rounded-md gap-2">
+                                <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[125px] md:w-[225px] sm:w-auto'>
-                                        <img src="bitcoin.svg" alt="Ethereum" className="h-5 w-5" />
+                                        
+
+                                        <DropDown
+                                            displayLable={true}
+                                            options={cryptoOptions}
+                                            selectedValue={selectedCrypto2}
+                                            onSelect={setSelectedCrypto2}
+                                        />
+
+                                        {/* <img src="bitcoin.svg" alt="Ethereum" className="h-5 w-5" />
                                         <select className="bg-transparent outline-none w-24 text-white cursor-pointer sm:w-48">
                                             <option style={{ backgroundColor: "#23232E", color: "white" }} value="usd">
                                                 Bitcoin
@@ -61,9 +88,12 @@ const Converter = () => {
                                             <option style={{ backgroundColor: "#23232E", color: "white" }} value="usd">
                                                 Bitcoin
                                             </option>
-                                        </select>
+                                        </select> */}
                                     </div>
-                                    <p className='text-white py-2 '>$3.600</p>
+                                    <input  
+                                        className='text-white bg-[#383848] rounded-lg w-20 h-full pl-4 sm:w-28 outline-none' 
+                                        placeholder='$3.600' 
+                                    />
                                 </div>
                             </div>
                         </div>

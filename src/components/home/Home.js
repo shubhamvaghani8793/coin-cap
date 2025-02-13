@@ -23,14 +23,23 @@ import { getCurrencyFlag } from '../../api/apiService'
 // Currency options with flags
 const currencyOptions = [
   { value: "USD", img: "usa-flag.svg", label: "USA", code: "USD" },
-  { value: "AED", img: "bitcoin.svg", label: "India", code: "AED" },
+  { value: "INR", img: "bitcoin.svg", label: "India", code: "AED" },
   { value: "ARS", img: "bitcoin.svg", label: "Argentine", code: "ARS" },
   { value: "AUD", img: "bitcoin.svg", label: "Australian", code: "AUD" },
   { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
 ];
 
+const cryptoOptions = [
+  { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
+  { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
+  { value: "BNB", img: "bitcoin.svg", label: "Solana", code: "BNB" },
+  { value: "XRP", img: "bitcoin.svg", label: "Tether", code: "XRP" },
+];
+
 function Home() {
-  const [selectedCurrency, setSelectedCurrency] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0]);
+  const [selectedCrypto1, setSelectedCrypto1] = useState(cryptoOptions[0]);
+  const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoOptions[1]);
   console.log(selectedCurrency);
 
   // dummy data
@@ -77,7 +86,6 @@ function Home() {
       ],
     ]
   }
-
 
   const [currencyFlag, setCurrencyFlag] = useState();
 
@@ -129,20 +137,28 @@ function Home() {
           <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9 backdrop-blur-[2px]'>   
            
             <DropDown
-            options={currencyOptions}
-            selectedValue={selectedCurrency}
-            onSelect={setSelectedCurrency} />
+              displayLable={false}
+              options={currencyOptions}
+              selectedValue={selectedCurrency}
+              onSelect={setSelectedCurrency} 
+            />
 
             <div className='flex sm:flex-row flex-col items-center justify-center gap-7  w-full mt-6'>
-              <div className='flex w-full px-2 items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
-                <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
+              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
+                {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
                     <option value="eth">Ethereum  </option>
                     <option value="btc">Bitcoin</option>
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
-                </select>
+                </select> */}
+                <DropDown
+                  displayLable={true}
+                  options={cryptoOptions}
+                  selectedValue={selectedCrypto1}
+                  onSelect={setSelectedCrypto1} 
+                />
                 <p className='w-1/3 text-center '>$ 4.43</p>
               </div>
 
@@ -150,15 +166,21 @@ function Home() {
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full px-2 items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
-                <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
+              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
+                {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
                     <option value="eth">Ethereum</option>
                     <option value="btc">Bitcoin</option>
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
-                </select>
+                </select> */}
+                <DropDown
+                  displayLable={true}
+                  options={cryptoOptions}
+                  selectedValue={selectedCrypto2}
+                  onSelect={setSelectedCrypto2} 
+                />
                 <p className='w-1/3 text-center '>$ 4.43</p>
               </div>
             </div>
