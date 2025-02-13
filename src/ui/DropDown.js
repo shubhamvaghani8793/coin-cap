@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Select from "react-select";
 
 
-export default function DropDown({options, selectedValue, onSelect}) {  
+export default function DropDown({options, selectedValue, onSelect, displayLable}) {  
 
   return (
     <div className="max-w-40 w-full ">
@@ -13,17 +13,16 @@ export default function DropDown({options, selectedValue, onSelect}) {
         isSearchable={true}
         getOptionLabel={(e) => (
           <div className="flex items-center">
-            <img src={e.img} alt="" className="w-5 h-5 mr-2" />
-            <span className="text-lg">{e.label}</span>
+            {/* <img src={e.img} alt="" className="w-5 h-5 mr-2" /> */}
+            <span className="text-lg">{displayLable ? e.label : e.code}</span>
           </div>
         )}
         styles={{
           control: (provided) => ({
             ...provided,
-            padding: "5px",
             borderRadius: "8px",
-            border: "1px solid #ccc",
             boxShadow: "none",
+            border: "none",
             background: "#23232E",
             outline: "none",
             color: "white",
@@ -42,7 +41,7 @@ export default function DropDown({options, selectedValue, onSelect}) {
           }),
           option: (provided, state) => ({
             ...provided,
-            backgroundColor: state.isSelected ? "#373740" : "#23232E",
+            backgroundColor: state.isFocused ? "#373740" : "#23232E",
             color: "white",
             cursor: "pointer",
           }),
