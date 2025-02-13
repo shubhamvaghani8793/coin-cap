@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../navbar/Navbar'
 import bitcoinIcon from '../../assets/Bitcoin-1.svg'
 import etheriumIcon from '../../assets/Etherium.svg'
@@ -17,8 +17,73 @@ import Popular from '../popular/Popular'
 import Footer from '../footer/Footer'
 import ContactUs from '../contactus/ContactUs'
 import Sidebar from '../sidebar/Sidebar'
+import { getCurrencyFlag } from '../../api/apiService'
+
+// dummy data
+const data = {
+  "result": "success",
+  "documentation": "https://www.exchangerate-api.com/docs",
+  "terms_of_use": "https://www.exchangerate-api.com/terms",
+  "supported_codes": [
+    [
+      "AED",
+      "UAE Dirham"
+    ],
+    [
+      "AFN",
+      "Afghan Afghani"
+    ],
+    [
+      "ALL",
+      "Albanian Lek"
+    ],
+    [
+      "AMD",
+      "Armenian Dram"
+    ],
+    [
+      "ANG",
+      "Netherlands Antillian Guilder"
+    ],
+    [
+      "AOA",
+      "Angolan Kwanza"
+    ],
+    [
+      "ARS",
+      "Argentine Peso"
+    ],
+    [
+      "AUD",
+      "Australian Dollar"
+    ],
+    [
+      "AWG",
+      "Aruban Florin"
+    ],
+  ]
+}
 
 function Home() {
+
+  const [currencyFlag, setCurrencyFlag] = useState();
+  const [selectedCurrency, setSelectedCurrency] = useState(null)
+
+  // get country currency Flag
+  const getCurrency = async () => {
+    try {
+      const data = await getCurrencyFlag();
+      setCurrencyFlag(data.supported_codes)
+      // console.log(data.supported_codes);
+    } catch (error) {
+      console.log(error); 
+    }
+  }
+  
+  useEffect(() => {
+    // getCurrency()
+  },[])
+
   return (
     <>
       <Navbar/>
@@ -51,20 +116,36 @@ function Home() {
 
           <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9 backdrop-blur-[2px]'>   
            
-            <select className='outline-none option-color w-24 py-2 px-4 rounded-md appearance-none'
+            {/* change currency Flag */}
+            <select 
+              className='outline-none option-color w-24 
+                py-2 px-4 rounded-md appearance-none
+                custom-scrollbar
+              '
               name="currency"
+              value={selectedCurrency || 'USD'}
+              onChange={(e) => setSelectedCurrency(e.target.value)}
             >
-                <option value="usd">USD</option>
-                <option value="inr">INR</option>
-                <option value="eur">EUR</option>
+              {
+                currencyFlag ? 
+                currencyFlag.map((item, index) => (
+                  <option key={index} value={item[0]}>{item[0]}</option>
+                ))
+                :
+                data?.supported_codes?.map((item, index) => (
+                  <option key={index} value={item[0]}>{item[0]}</option>
+                ))
+
+
+              }
             </select>
 
-            <div className='flex justify-center gap-7  w-full mt-6'>
-              <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
+            <div className='flex sm:flex-row flex-col items-center justify-center gap-7  w-full mt-6'>
+              <div className='flex w-full px-2 items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
                 <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
-                    <option value="eth">Ethereum</option>
+                    <option value="eth">Ethereum  </option>
                     <option value="btc">Bitcoin</option>
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
@@ -72,11 +153,11 @@ function Home() {
                 <p className='w-1/3 text-center '>$ 4.43</p>
               </div>
 
-              <button>
+              <button className='rotate-90 md:rotate-0'>
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
+              <div className='flex w-full px-2 items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md lightGary'>
                 <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
@@ -115,7 +196,7 @@ function Home() {
 
               {/* range input */}
               <div className='flex items-center gap-8'>
-                <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer'/>
+                <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer' />
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
                   <img src={bitcoin_sm} alt="icon" />
