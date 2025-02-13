@@ -20,7 +20,7 @@ const Converter = () => {
                             {/* Dropdown */}
                             <div className="relative mb-4 flex justify-center w-full md:w-auto">
                                 <select className="bg-[#23232E] outline-none appearance-none text-white p-4 rounded-md w-full md:w-72 ">
-                                    <option>Crypto to Crypto</option>
+                                    <option value="1">Crypto to Crypto</option>
                                 </select>
 
                                 <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
