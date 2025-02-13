@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../navbar/Navbar'
 import bitcoinIcon from '../../assets/Bitcoin-1.svg'
 import etheriumIcon from '../../assets/Etherium.svg'
@@ -17,8 +17,117 @@ import Popular from '../popular/Popular'
 import Footer from '../footer/Footer'
 import ContactUs from '../contactus/ContactUs'
 import Sidebar from '../sidebar/Sidebar'
+import DropDown from '../../ui/DropDown'
+import { getCurrencyFlag } from '../../api/apiService'
+import { DummyCryptoData } from './db'
+ 
+// Currency options with flags
+const currencyOptions = [
+  { value: "USD", img: "usa-flag.svg", label: "USA", code: "USD" },
+  { value: "INR", img: "bitcoin.svg", label: "India", code: "AED" },
+  { value: "ARS", img: "bitcoin.svg", label: "Argentine", code: "ARS" },
+  { value: "AUD", img: "bitcoin.svg", label: "Australian", code: "AUD" },
+  { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
+];
+
+// crypto option data
+const cryptoOptions = [
+  { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
+  { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
+  { value: "BNB", img: "bitcoin.svg", label: "Solana", code: "BNB" },
+  { value: "XRP", img: "bitcoin.svg", label: "Tether", code: "XRP" },
+];
 
 function Home() {
+
+  const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0]);
+
+  const [cryptoAllData, setCryptoAllData] = useState(null)
+
+  const [selectedCrypto1, setSelectedCrypto1] = useState(cryptoOptions[0]);
+  const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoOptions[1]);
+
+  // dummy data
+  const data = {
+    "result": "success",
+    "documentation": "https://www.exchangerate-api.com/docs",
+    "terms_of_use": "https://www.exchangerate-api.com/terms",
+    "supported_codes": [
+      [
+        "AED",
+        "UAE Dirham"
+      ],
+      [
+        "AFN",
+        "Afghan Afghani"
+      ],
+      [
+        "ALL",
+        "Albanian Lek"
+      ],
+      [
+        "AMD",
+        "Armenian Dram"
+      ],
+      [
+        "ANG",
+        "Netherlands Antillian Guilder"
+      ],
+      [
+        "AOA",
+        "Angolan Kwanza"
+      ],
+      [
+        "ARS",
+        "Argentine Peso"
+      ],
+      [
+        "AUD",
+        "Australian Dollar"
+      ],
+      [
+        "AWG",
+        "Aruban Florin"
+      ],
+    ]
+  }
+
+  const [currencyFlag, setCurrencyFlag] = useState();
+  const [cryptoData, setCryptoData] = useState(null);
+
+  // get country currency Flag
+  const getCurrency = async () => {
+    try {
+      const data = await getCurrencyFlag();
+      setCurrencyFlag(data.supported_codes)
+      // console.log(data.supported_codes);
+    } catch (error) {
+      console.log(error); 
+    }
+  }
+
+  const modifiedData = () => {
+    const newArray = DummyCryptoData?.data?.map((item) => {
+      const { id, name, quote, symbol } = item;
+      return {id, value: name, label: name, quote, code: symbol}
+    })
+
+    setCryptoAllData(newArray)
+  }
+  
+  useEffect(() => {
+    // getCurrency()
+    modifiedData()
+  },[])
+  // console.log(DummyCryptoData.data);
+  // console.log(cryptoAllData);
+  console.log(selectedCrypto1);
+
+  const handleSwap = () => {
+    setSelectedCrypto1(selectedCrypto2)
+    setSelectedCrypto2(selectedCrypto1)
+  }
+  
   return (
     <>
       <Navbar/>
@@ -51,41 +160,53 @@ function Home() {
 
           <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9 backdrop-blur-[2px]'>   
            
-            <select className='outline-none option-color w-24 py-2 px-4 rounded-md appearance-none'
-              name="currency"
-            >
-                <option value="usd">USD</option>
-                <option value="inr">INR</option>
-                <option value="eur">EUR</option>
-            </select>
+            <DropDown
+              displayLable={false}
+              options={currencyOptions}
+              selectedValue={selectedCurrency}
+              onSelect={setSelectedCurrency} 
+            />
 
-            <div className='flex justify-center gap-7  w-full mt-6'>
-              <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
-                <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
+            <div className='flex sm:flex-row flex-col items-center justify-center gap-7  w-full mt-6'>
+              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
+                {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
-                    <option value="eth">Ethereum</option>
+                    <option value="eth">Ethereum  </option>
                     <option value="btc">Bitcoin</option>
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
-                </select>
-                <p className='w-1/3 text-center '>$ 4.43</p>
+                </select> */}
+                
+                <DropDown
+                  displayLable={true}
+                  options={cryptoAllData || cryptoOptions}
+                  selectedValue={selectedCrypto1}
+                  onSelect={setSelectedCrypto1} 
+                />
+                <p className='w-1/3 text-center px-2'>{selectedCrypto1?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
               </div>
 
-              <button>
+              <button className='rotate-90 md:rotate-0' onClick={handleSwap}>
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full px-2 items-center gap-6 max-w-[250px] rounded-md lightGary'>
-                <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
+              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
+                {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
                     <option value="eth">Ethereum</option>
                     <option value="btc">Bitcoin</option>
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
-                </select>
-                <p className='w-1/3 text-center '>$ 4.43</p>
+                </select> */}
+                <DropDown
+                  displayLable={true}
+                  options={cryptoAllData || cryptoOptions}
+                  selectedValue={selectedCrypto2}
+                  onSelect={setSelectedCrypto2} 
+                />
+                <p className='w-1/3 text-center px-2'>{selectedCrypto2?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
               </div>
             </div>
 
@@ -115,7 +236,7 @@ function Home() {
 
               {/* range input */}
               <div className='flex items-center gap-8'>
-                <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer'/>
+                <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer' />
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
                   <img src={bitcoin_sm} alt="icon" />

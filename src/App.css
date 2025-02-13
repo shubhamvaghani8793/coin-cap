@@ -1,3 +1,13 @@
 body{
     background-color: black;
 }
+
+.selectBox{
+    max-height: 140px;  /* Controls the select box height */
+    overflow-y: hidden;
+}
+
+.selectBox option{
+    max-height: 100px;  /* Limit dropdown height */
+  overflow-y: auto;
+}
