@@ -9,7 +9,7 @@ import { DummyCurrencyData } from './converterDb';
 import DropDown2 from '../../ui/DropDown2';
 
 const cryptoData = DummyCryptoData?.data.map(item => ({
-    label: item.symbol,
+    label: item.name,
     value: item
 }));
 const currencyOptions = Object.keys(DummyCurrencyData.conversion_rates).map(key => ({
@@ -23,9 +23,23 @@ const Converter = () => {
     const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoData[1]);
     const [inputValue1, setInputValue1] = useState("");
     const [inputValue2, setInputValue2] = useState("");
+    const [isSwapped, setIsSwapped] = useState(false);
+    const [lastEditedInput, setLastEditedInput] = useState(null);
 
-    // Reset dropdowns when conversion type changes
     useEffect(() => {
+        resetSelections();
+    }, [convertType]);
+
+    // Effect to handle conversion when options change
+    useEffect(() => {
+        if (lastEditedInput === 'input1' && inputValue1) {
+            handleConversion(inputValue1, true);
+        } else if (lastEditedInput === 'input2' && inputValue2) {
+            handleConversion(inputValue2, false);
+        }
+    }, [selectedCrypto1, selectedCrypto2]);
+
+    const resetSelections = () => {
         if (convertType === "1") {
             setSelectedCrypto1(cryptoData[0]);
             setSelectedCrypto2(cryptoData[1]);
@@ -38,86 +52,124 @@ const Converter = () => {
         }
         setInputValue1("");
         setInputValue2("");
-    }, [convertType]);
+        setIsSwapped(false);
+        setLastEditedInput(null);
+    };
 
-    // Function to swap values
     const swapValues = () => {
-        const tempCrypto1 = selectedCrypto1;
-        setSelectedCrypto1(selectedCrypto2);
-        setSelectedCrypto2(tempCrypto1);
+        if (convertType === "2") {
+            const tempCrypto1 = selectedCrypto1;
+            const tempCrypto2 = selectedCrypto2;
+
+            if (!isSwapped) {
+                setSelectedCrypto1(currencyOptions.find(opt => opt.label === tempCrypto2.label) || currencyOptions[0]);
+                setSelectedCrypto2(cryptoData.find(opt => opt.label === tempCrypto1.label) || cryptoData[0]);
+            } else {
+                setSelectedCrypto1(cryptoData.find(opt => opt.label === tempCrypto2.label) || cryptoData[0]);
+                setSelectedCrypto2(currencyOptions.find(opt => opt.label === tempCrypto1.label) || currencyOptions[0]);
+            }
+        } else {
+            const tempCrypto1 = selectedCrypto1;
+            setSelectedCrypto1(selectedCrypto2);
+            setSelectedCrypto2(tempCrypto1);
+        }
+
+        // Swap input values and last edited input
         const tempValue1 = inputValue1;
         setInputValue1(inputValue2);
         setInputValue2(tempValue1);
+        setLastEditedInput(lastEditedInput === 'input1' ? 'input2' : 'input1');
+        setIsSwapped(!isSwapped);
     };
 
-    // Get dropdown options based on convertType
-    const getOptions1 = () => (convertType === "3" ? currencyOptions : cryptoData);
-    const getOptions2 = () => (convertType === "1" ? cryptoData : currencyOptions);
+    const getOptions1 = () => {
+        if (convertType === "2") {
+            return isSwapped ? currencyOptions : cryptoData;
+        }
+        return convertType === "3" ? currencyOptions : cryptoData;
+    };
 
-    // Function to handle conversion
+    const getOptions2 = () => {
+        if (convertType === "2") {
+            return isSwapped ? cryptoData : currencyOptions;
+        }
+        return convertType === "1" ? cryptoData : currencyOptions;
+    };
+
     const handleConversion = (value, isInput1) => {
         if (!selectedCrypto1 || !selectedCrypto2) return;
-    
+
         const valueNum = parseFloat(value);
-        if (isNaN(valueNum)) return; // Prevent NaN issues
-    
+        if (isNaN(valueNum)) {
+            if (isInput1) {
+                setInputValue1("");
+                setInputValue2("");
+            } else {
+                setInputValue2("");
+                setInputValue1("");
+            }
+            return;
+        }
+
         let convertedValue = 0;
-    
-        if (convertType === "1") { // Crypto to Crypto
+
+        if (convertType === "1") {
             if (isInput1) {
                 convertedValue = (valueNum * selectedCrypto1.value.quote.USD.price) / selectedCrypto2.value.quote.USD.price;
             } else {
                 convertedValue = (valueNum * selectedCrypto2.value.quote.USD.price) / selectedCrypto1.value.quote.USD.price;
             }
-        } else if (convertType === "2") { // Crypto to Currency
-            if (isInput1) {
-                convertedValue = valueNum * selectedCrypto1.value.quote.USD.price * selectedCrypto2.value;
+        } else if (convertType === "2") {
+            if (!isSwapped) {
+                if (isInput1) {
+                    convertedValue = valueNum * selectedCrypto1.value.quote.USD.price * selectedCrypto2.value;
+                } else {
+                    convertedValue = valueNum / (selectedCrypto1.value.quote.USD.price * selectedCrypto2.value);
+                }
             } else {
-                convertedValue = valueNum / (selectedCrypto1.value.quote.USD.price * selectedCrypto2.value);
+                if (isInput1) {
+                    convertedValue = valueNum / (selectedCrypto2.value.quote.USD.price*selectedCrypto1.value);
+                } else {
+                    convertedValue = valueNum * selectedCrypto2.value.quote.USD.price*selectedCrypto1.value;
+                }
             }
-        } else { // Currency to Currency
+        } else {
             if (isInput1) {
                 convertedValue = (valueNum * selectedCrypto2.value) / selectedCrypto1.value;
             } else {
                 convertedValue = (valueNum * selectedCrypto1.value) / selectedCrypto2.value;
             }
         }
-    
+        
         if (isInput1) {
             setInputValue1(value);
-            setInputValue2(convertedValue.toFixed(6)); // Show result in second input
+            setInputValue2(convertedValue.toFixed(6));
+            setLastEditedInput('input1');
         } else {
             setInputValue2(value);
-            setInputValue1(convertedValue.toFixed(6)); // Show result in first input
+            setInputValue1(convertedValue.toFixed(6));
+            setLastEditedInput('input2');
         }
     };
-    
-    
-    
-    
 
-    // Function to handle dropdown selection
     const handleSelect1 = (selected) => {
         setSelectedCrypto1(selected);
-        if (inputValue1) {
-            handleConversion(inputValue1, true);
-        }
     };
-
+    
     const handleSelect2 = (selected) => {
         setSelectedCrypto2(selected);
-        if (inputValue2) {
-            handleConversion(inputValue2, false);
-        }
     };
 
+    
+
+    // Rest of your JSX remains the same...
     return (
         <>
             <Navbar />
             <Sidebar />
-            
-          <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
-          <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
+
+            <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
+            <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
             <div className='place-items-center pt-5 mx-5 md:mx-0 md:mt-20'>
                 <div className='max-w-4xl w-full place-items-center'>
                     <p className='text-3xl text-white text-center font-semibold max-w-[300px] w-full sm:max-w-[500px] sm:text-5xl md:text-7xl md:max-w-[800px]'>
@@ -125,7 +177,6 @@ const Converter = () => {
                     </p>
                     <div className="border border-[#676767] w-full md:w-auto rounded-xl mx-2 py-6 px-4 mt-10 bg-transparent sm:px-6">
                         <div className='place-items-center'>
-                            {/* Conversion Type Selector */}
                             <div className="relative mb-4 flex justify-center w-full md:w-auto">
                                 <select
                                     value={convertType}
@@ -141,9 +192,7 @@ const Converter = () => {
                                 </div>
                             </div>
 
-                            {/* Dropdown and Input Fields */}
                             <div className="mt-16 flex flex-col items-center md:flex-row gap-3 md:gap-0">
-                                {/* First Dropdown */}
                                 <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
                                         <DropDown2
@@ -161,18 +210,16 @@ const Converter = () => {
                                     />
                                 </div>
 
-                                {/* Swap Icon */}
                                 <img
                                     src="leftright.svg"
                                     alt="Swap"
                                     className="h-5 w-5 mx-5 rotate-90 md:rotate-0 cursor-pointer"
-                                    onClick={swapValues} // Call swap function on click
+                                    onClick={swapValues}
                                 />
 
-                                {/* Second Dropdown */}
                                 <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
-                                <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
-                                <DropDown2
+                                    <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
+                                        <DropDown2
                                             displayLabel={true}
                                             options={getOptions2()}
                                             selectedValue={selectedCrypto2}
@@ -189,7 +236,9 @@ const Converter = () => {
                             </div>
                         </div>
                         <hr className='border-px border-[#676767] mt-10' />
-                        <p className="text-gray-400 text-sm mt-4 mb-20">{inputValue1} {selectedCrypto1.label} = {inputValue2} {selectedCrypto2.label}</p>
+                        <p className="text-gray-400 text-sm mt-4 mb-20">
+                            {inputValue1} {selectedCrypto1?.label} = {inputValue2} {selectedCrypto2?.label}
+                        </p>
                     </div>
                 </div>
             </div>

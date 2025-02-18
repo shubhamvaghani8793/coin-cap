@@ -9,11 +9,8 @@ export default function DropDown2({ options, selectedValue, onSelect, displayLab
         value={selectedValue}
         onChange={onSelect}
         isSearchable={true}
-        getOptionLabel={(e) => (
-          <div className="flex items-center">
-            <span className="text-lg">{displayLabel ? e.label : e.symbol}</span>
-          </div>
-        )}
+        getOptionLabel={(e) => e.label}  // Ensure correct label display
+        getOptionValue={(e) => e.label}  // Ensure search works properly
         styles={{
           control: (provided) => ({
             ...provided,
