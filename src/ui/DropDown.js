@@ -1,7 +1,10 @@
   import React, { useMemo, useState } from "react";
   import Select from "react-select";
 
-  export default function DropDown({options, selectedValue, onSelect, displayLable, isForCrypto=false }) {  
+  export default function DropDown({
+      options, selectedValue, onSelect, displayLable, isForCrypto=false,
+      selectedCurrency
+    }) {  
     
     const [searchInput, setSearchInput] = useState("");
 
