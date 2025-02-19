@@ -20,6 +20,7 @@ import Sidebar from '../sidebar/Sidebar'
 import DropDown from '../../ui/DropDown'
 import { getCurrencyFlag } from '../../api/apiService'
 import { DummyCryptoData } from './db'
+import ProgressBar from '@ramonak/react-progress-bar'
  
 // Currency options with flags
 const currencyOptions = [
@@ -28,71 +29,701 @@ const currencyOptions = [
   { value: "ARS", img: "bitcoin.svg", label: "Argentine", code: "ARS" },
   { value: "AUD", img: "bitcoin.svg", label: "Australian", code: "AUD" },
   { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
+  { value: "BDT", img: "bitcoin.svg", label: "Bangladeshi", code: "BDT" },
 ];
 
 // crypto option data
-const cryptoOptions = [
-  { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
-  { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
-  { value: "BNB", img: "bitcoin.svg", label: "Solana", code: "BNB" },
-  { value: "XRP", img: "bitcoin.svg", label: "Tether", code: "XRP" },
-];
+// const cryptoOptions = [
+//   { value: "BTC", img: "usa-flag.svg", label: "Bitcoin", code: "BTC" },
+//   { value: "ETH", img: "bitcoin.svg", label: "Etherium", code: "ETH" },
+//   { value: "BNB", img: "bitcoin.svg", label: "Solana", code: "BNB" },
+//   { value: "XRP", img: "bitcoin.svg", label: "Tether", code: "XRP" },
+// ];
 
 function Home() {
 
-  const [selectedCurrency, setSelectedCurrency] = useState(currencyOptions[0]);
+  const [selectedCurrency, setSelectedCurrency] = useState(null);
 
   const [cryptoAllData, setCryptoAllData] = useState(null)
+  const [currencyData,  setCurrencyData] = useState([])
+  
 
-  const [selectedCrypto1, setSelectedCrypto1] = useState(cryptoOptions[0]);
-  const [selectedCrypto2, setSelectedCrypto2] = useState(cryptoOptions[1]);
+  const [selectedCrypto1, setSelectedCrypto1] = useState(null);
+  const [selectedCrypto2, setSelectedCrypto2] = useState(null);
+  const [marketCap, setMarketCap] = useState(null)
+
+  console.log(selectedCrypto1);
+  console.log(selectedCrypto2);
 
   // dummy data
-  const data = {
+  const AllCurrencyData = {
     "result": "success",
     "documentation": "https://www.exchangerate-api.com/docs",
     "terms_of_use": "https://www.exchangerate-api.com/terms",
     "supported_codes": [
-      [
-        "AED",
-        "UAE Dirham"
-      ],
-      [
-        "AFN",
-        "Afghan Afghani"
-      ],
-      [
-        "ALL",
-        "Albanian Lek"
-      ],
-      [
-        "AMD",
-        "Armenian Dram"
-      ],
-      [
-        "ANG",
-        "Netherlands Antillian Guilder"
-      ],
-      [
-        "AOA",
-        "Angolan Kwanza"
-      ],
-      [
-        "ARS",
-        "Argentine Peso"
-      ],
-      [
-        "AUD",
-        "Australian Dollar"
-      ],
-      [
-        "AWG",
-        "Aruban Florin"
-      ],
+        [
+            "AED",
+            "UAE Dirham"
+        ],
+        [
+            "AFN",
+            "Afghan Afghani"
+        ],
+        [
+            "ALL",
+            "Albanian Lek"
+        ],
+        [
+            "AMD",
+            "Armenian Dram"
+        ],
+        [
+            "ANG",
+            "Netherlands Antillian Guilder"
+        ],
+        [
+            "AOA",
+            "Angolan Kwanza"
+        ],
+        [
+            "ARS",
+            "Argentine Peso"
+        ],
+        [
+            "AUD",
+            "Australian Dollar"
+        ],
+        [
+            "AWG",
+            "Aruban Florin"
+        ],
+        [
+            "AZN",
+            "Azerbaijani Manat"
+        ],
+        [
+            "BAM",
+            "Bosnia and Herzegovina Convertible Mark"
+        ],
+        [
+            "BBD",
+            "Barbados Dollar"
+        ],
+        [
+            "BDT",
+            "Bangladeshi Taka"
+        ],
+        [
+            "BGN",
+            "Bulgarian Lev"
+        ],
+        [
+            "BHD",
+            "Bahraini Dinar"
+        ],
+        [
+            "BIF",
+            "Burundian Franc"
+        ],
+        [
+            "BMD",
+            "Bermudian Dollar"
+        ],
+        [
+            "BND",
+            "Brunei Dollar"
+        ],
+        [
+            "BOB",
+            "Bolivian Boliviano"
+        ],
+        [
+            "BRL",
+            "Brazilian Real"
+        ],
+        [
+            "BSD",
+            "Bahamian Dollar"
+        ],
+        [
+            "BTN",
+            "Bhutanese Ngultrum"
+        ],
+        [
+            "BWP",
+            "Botswana Pula"
+        ],
+        [
+            "BYN",
+            "Belarusian Ruble"
+        ],
+        [
+            "BZD",
+            "Belize Dollar"
+        ],
+        [
+            "CAD",
+            "Canadian Dollar"
+        ],
+        [
+            "CDF",
+            "Congolese Franc"
+        ],
+        [
+            "CHF",
+            "Swiss Franc"
+        ],
+        [
+            "CLP",
+            "Chilean Peso"
+        ],
+        [
+            "CNY",
+            "Chinese Renminbi"
+        ],
+        [
+            "COP",
+            "Colombian Peso"
+        ],
+        [
+            "CRC",
+            "Costa Rican Colon"
+        ],
+        [
+            "CUP",
+            "Cuban Peso"
+        ],
+        [
+            "CVE",
+            "Cape Verdean Escudo"
+        ],
+        [
+            "CZK",
+            "Czech Koruna"
+        ],
+        [
+            "DJF",
+            "Djiboutian Franc"
+        ],
+        [
+            "DKK",
+            "Danish Krone"
+        ],
+        [
+            "DOP",
+            "Dominican Peso"
+        ],
+        [
+            "DZD",
+            "Algerian Dinar"
+        ],
+        [
+            "EGP",
+            "Egyptian Pound"
+        ],
+        [
+            "ERN",
+            "Eritrean Nakfa"
+        ],
+        [
+            "ETB",
+            "Ethiopian Birr"
+        ],
+        [
+            "EUR",
+            "Euro"
+        ],
+        [
+            "FJD",
+            "Fiji Dollar"
+        ],
+        [
+            "FKP",
+            "Falkland Islands Pound"
+        ],
+        [
+            "FOK",
+            "Faroese Króna"
+        ],
+        [
+            "GBP",
+            "Pound Sterling"
+        ],
+        [
+            "GEL",
+            "Georgian Lari"
+        ],
+        [
+            "GGP",
+            "Guernsey Pound"
+        ],
+        [
+            "GHS",
+            "Ghanaian Cedi"
+        ],
+        [
+            "GIP",
+            "Gibraltar Pound"
+        ],
+        [
+            "GMD",
+            "Gambian Dalasi"
+        ],
+        [
+            "GNF",
+            "Guinean Franc"
+        ],
+        [
+            "GTQ",
+            "Guatemalan Quetzal"
+        ],
+        [
+            "GYD",
+            "Guyanese Dollar"
+        ],
+        [
+            "HKD",
+            "Hong Kong Dollar"
+        ],
+        [
+            "HNL",
+            "Honduran Lempira"
+        ],
+        [
+            "HRK",
+            "Croatian Kuna"
+        ],
+        [
+            "HTG",
+            "Haitian Gourde"
+        ],
+        [
+            "HUF",
+            "Hungarian Forint"
+        ],
+        [
+            "IDR",
+            "Indonesian Rupiah"
+        ],
+        [
+            "ILS",
+            "Israeli New Shekel"
+        ],
+        [
+            "IMP",
+            "Manx Pound"
+        ],
+        [
+            "INR",
+            "Indian Rupee"
+        ],
+        [
+            "IQD",
+            "Iraqi Dinar"
+        ],
+        [
+            "IRR",
+            "Iranian Rial"
+        ],
+        [
+            "ISK",
+            "Icelandic Króna"
+        ],
+        [
+            "JEP",
+            "Jersey Pound"
+        ],
+        [
+            "JMD",
+            "Jamaican Dollar"
+        ],
+        [
+            "JOD",
+            "Jordanian Dinar"
+        ],
+        [
+            "JPY",
+            "Japanese Yen"
+        ],
+        [
+            "KES",
+            "Kenyan Shilling"
+        ],
+        [
+            "KGS",
+            "Kyrgyzstani Som"
+        ],
+        [
+            "KHR",
+            "Cambodian Riel"
+        ],
+        [
+            "KID",
+            "Kiribati Dollar"
+        ],
+        [
+            "KMF",
+            "Comorian Franc"
+        ],
+        [
+            "KRW",
+            "South Korean Won"
+        ],
+        [
+            "KWD",
+            "Kuwaiti Dinar"
+        ],
+        [
+            "KYD",
+            "Cayman Islands Dollar"
+        ],
+        [
+            "KZT",
+            "Kazakhstani Tenge"
+        ],
+        [
+            "LAK",
+            "Lao Kip"
+        ],
+        [
+            "LBP",
+            "Lebanese Pound"
+        ],
+        [
+            "LKR",
+            "Sri Lanka Rupee"
+        ],
+        [
+            "LRD",
+            "Liberian Dollar"
+        ],
+        [
+            "LSL",
+            "Lesotho Loti"
+        ],
+        [
+            "LYD",
+            "Libyan Dinar"
+        ],
+        [
+            "MAD",
+            "Moroccan Dirham"
+        ],
+        [
+            "MDL",
+            "Moldovan Leu"
+        ],
+        [
+            "MGA",
+            "Malagasy Ariary"
+        ],
+        [
+            "MKD",
+            "Macedonian Denar"
+        ],
+        [
+            "MMK",
+            "Burmese Kyat"
+        ],
+        [
+            "MNT",
+            "Mongolian Tögrög"
+        ],
+        [
+            "MOP",
+            "Macanese Pataca"
+        ],
+        [
+            "MRU",
+            "Mauritanian Ouguiya"
+        ],
+        [
+            "MUR",
+            "Mauritian Rupee"
+        ],
+        [
+            "MVR",
+            "Maldivian Rufiyaa"
+        ],
+        [
+            "MWK",
+            "Malawian Kwacha"
+        ],
+        [
+            "MXN",
+            "Mexican Peso"
+        ],
+        [
+            "MYR",
+            "Malaysian Ringgit"
+        ],
+        [
+            "MZN",
+            "Mozambican Metical"
+        ],
+        [
+            "NAD",
+            "Namibian Dollar"
+        ],
+        [
+            "NGN",
+            "Nigerian Naira"
+        ],
+        [
+            "NIO",
+            "Nicaraguan Córdoba"
+        ],
+        [
+            "NOK",
+            "Norwegian Krone"
+        ],
+        [
+            "NPR",
+            "Nepalese Rupee"
+        ],
+        [
+            "NZD",
+            "New Zealand Dollar"
+        ],
+        [
+            "OMR",
+            "Omani Rial"
+        ],
+        [
+            "PAB",
+            "Panamanian Balboa"
+        ],
+        [
+            "PEN",
+            "Peruvian Sol"
+        ],
+        [
+            "PGK",
+            "Papua New Guinean Kina"
+        ],
+        [
+            "PHP",
+            "Philippine Peso"
+        ],
+        [
+            "PKR",
+            "Pakistani Rupee"
+        ],
+        [
+            "PLN",
+            "Polish Złoty"
+        ],
+        [
+            "PYG",
+            "Paraguayan Guaraní"
+        ],
+        [
+            "QAR",
+            "Qatari Riyal"
+        ],
+        [
+            "RON",
+            "Romanian Leu"
+        ],
+        [
+            "RSD",
+            "Serbian Dinar"
+        ],
+        [
+            "RUB",
+            "Russian Ruble"
+        ],
+        [
+            "RWF",
+            "Rwandan Franc"
+        ],
+        [
+            "SAR",
+            "Saudi Riyal"
+        ],
+        [
+            "SBD",
+            "Solomon Islands Dollar"
+        ],
+        [
+            "SCR",
+            "Seychellois Rupee"
+        ],
+        [
+            "SDG",
+            "Sudanese Pound"
+        ],
+        [
+            "SEK",
+            "Swedish Krona"
+        ],
+        [
+            "SGD",
+            "Singapore Dollar"
+        ],
+        [
+            "SHP",
+            "Saint Helena Pound"
+        ],
+        [
+            "SLE",
+            "Sierra Leonean Leone"
+        ],
+        [
+            "SLL",
+            "Sierra Leonean Leone"
+        ],
+        [
+            "SOS",
+            "Somali Shilling"
+        ],
+        [
+            "SRD",
+            "Surinamese Dollar"
+        ],
+        [
+            "SSP",
+            "South Sudanese Pound"
+        ],
+        [
+            "STN",
+            "São Tomé and Príncipe Dobra"
+        ],
+        [
+            "SYP",
+            "Syrian Pound"
+        ],
+        [
+            "SZL",
+            "Eswatini Lilangeni"
+        ],
+        [
+            "THB",
+            "Thai Baht"
+        ],
+        [
+            "TJS",
+            "Tajikistani Somoni"
+        ],
+        [
+            "TMT",
+            "Turkmenistan Manat"
+        ],
+        [
+            "TND",
+            "Tunisian Dinar"
+        ],
+        [
+            "TOP",
+            "Tongan Paʻanga"
+        ],
+        [
+            "TRY",
+            "Turkish Lira"
+        ],
+        [
+            "TTD",
+            "Trinidad and Tobago Dollar"
+        ],
+        [
+            "TVD",
+            "Tuvaluan Dollar"
+        ],
+        [
+            "TWD",
+            "New Taiwan Dollar"
+        ],
+        [
+            "TZS",
+            "Tanzanian Shilling"
+        ],
+        [
+            "UAH",
+            "Ukrainian Hryvnia"
+        ],
+        [
+            "UGX",
+            "Ugandan Shilling"
+        ],
+        [
+            "USD",
+            "United States Dollar"
+        ],
+        [
+            "UYU",
+            "Uruguayan Peso"
+        ],
+        [
+            "UZS",
+            "Uzbekistani So'm"
+        ],
+        [
+            "VES",
+            "Venezuelan Bolívar Soberano"
+        ],
+        [
+            "VND",
+            "Vietnamese Đồng"
+        ],
+        [
+            "VUV",
+            "Vanuatu Vatu"
+        ],
+        [
+            "WST",
+            "Samoan Tālā"
+        ],
+        [
+            "XAF",
+            "Central African CFA Franc"
+        ],
+        [
+            "XCD",
+            "East Caribbean Dollar"
+        ],
+        [
+            "XDR",
+            "Special Drawing Rights"
+        ],
+        [
+            "XOF",
+            "West African CFA franc"
+        ],
+        [
+            "XPF",
+            "CFP Franc"
+        ],
+        [
+            "YER",
+            "Yemeni Rial"
+        ],
+        [
+            "ZAR",
+            "South African Rand"
+        ],
+        [
+            "ZMW",
+            "Zambian Kwacha"
+        ],
+        [
+            "ZWL",
+            "Zimbabwean Dollar"
+        ]
     ]
-  }
+}
 
-  const [currencyFlag, setCurrencyFlag] = useState();
+const CurrencyDataConverter = () => {
+  const newArr = AllCurrencyData?.supported_codes?.map((item) => {
+    return {value: item[1], label: item[1], code: item[0]}
+  })
+
+  setCurrencyData(newArr)
+  setSelectedCurrency(newArr[0])
+}
+
+  // currently selected currency value
+  const [currencyFlag, setCurrencyFlag] = useState(1);
+  
   const [cryptoData, setCryptoData] = useState(null);
 
   // get country currency Flag
@@ -100,7 +731,6 @@ function Home() {
     try {
       const data = await getCurrencyFlag();
       setCurrencyFlag(data.supported_codes)
-      // console.log(data.supported_codes);
     } catch (error) {
       console.log(error); 
     }
@@ -108,26 +738,100 @@ function Home() {
 
   const modifiedData = () => {
     const newArray = DummyCryptoData?.data?.map((item) => {
-      const { id, name, quote, symbol } = item;
-      return {id, value: name, label: name, quote, code: symbol}
+      const { 
+        id, 
+        name, 
+        quote, 
+        circulating_supply,
+        symbol, 
+      } = item;
+      
+      return { 
+        id, 
+        value: name, 
+        label: name, 
+        circulating_supply,
+        quote, 
+        code: symbol
+      }
     })
 
     setCryptoAllData(newArray)
+    setSelectedCrypto1(newArray[0])
+    setSelectedCrypto2(newArray[1])
   }
+  
   
   useEffect(() => {
     // getCurrency()
     modifiedData()
+    CurrencyDataConverter()
   },[])
-  // console.log(DummyCryptoData.data);
-  // console.log(cryptoAllData);
-  console.log(selectedCrypto1);
 
   const handleSwap = () => {
     setSelectedCrypto1(selectedCrypto2)
     setSelectedCrypto2(selectedCrypto1)
   }
-  
+
+  useEffect(() => {
+
+    // total market cap calulation
+    const field1 = selectedCrypto2?.quote?.USD?.market_cap;
+    const field2 = selectedCrypto1?.circulating_supply;
+    let value = field1 / field2;
+
+    const valueStr = value?.toString();
+    const [integerPart] = valueStr?.split(".");
+
+    value = value * currencyFlag;
+
+    if (integerPart?.length >= 3) {
+      value = value.toFixed(2)
+    }else{
+      value = value.toFixed(4)
+    }
+    
+    setMarketCap(value)
+
+    // under/above caluculation
+    const cap1 = selectedCrypto1?.quote?.USD?.market_cap;  
+    const cap2 = selectedCrypto2?.quote?.USD?.market_cap;  
+    
+  },[selectedCrypto1, selectedCrypto2])
+
+  const getXreturn = (value) => {
+    const answer = value / selectedCrypto1?.quote?.USD?.price;
+    return answer.toFixed(2);
+  }
+
+  const cryptoPrice = (price) => {
+    let newCurrency = price * currencyFlag
+    const valueStr = newCurrency?.toString();
+    const [integerPart] = valueStr?.split(".");
+
+    if (integerPart?.length >= 3) {
+      return `${Number(newCurrency?.toFixed(2))?.toLocaleString('en-US')}`;
+    }else{
+      return `${Number(newCurrency?.toFixed(4))?.toLocaleString('en-US')}`
+    }
+
+    // Number(selectedCrypto2?.quote?.USD?.price.toFixed(2)).toLocaleString('en-US')
+  }
+
+  const handleProgress1 = () => {
+    const value = (selectedCrypto1?.quote?.USD?.market_cap 
+      / selectedCrypto2?.quote?.USD?.market_cap
+     ) * 100
+     return value;
+  }
+
+  const handleProgress2 = () => {
+    const value = (selectedCrypto2?.quote?.USD?.market_cap 
+      / selectedCrypto1?.quote?.USD?.market_cap
+     ) * 100
+     return value;
+  }
+
   return (
     <>
       <Navbar/>
@@ -162,13 +866,13 @@ function Home() {
            
             <DropDown
               displayLable={false}
-              options={currencyOptions}
+              options={currencyData}
               selectedValue={selectedCurrency}
               onSelect={setSelectedCurrency} 
             />
 
             <div className='flex sm:flex-row flex-col items-center justify-center gap-7  w-full mt-6'>
-              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
+              <div className='flex w-full items-center gap-6 sm:max-w-[290px] max-w-[350px] rounded-md bg-[#23232E]'>
                 {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
@@ -179,19 +883,22 @@ function Home() {
                 </select> */}
                 
                 <DropDown
+                  isForCrypto={true}
                   displayLable={true}
-                  options={cryptoAllData || cryptoOptions}
+                  options={cryptoAllData}
                   selectedValue={selectedCrypto1}
                   onSelect={setSelectedCrypto1} 
                 />
-                <p className='w-1/3 text-center px-2'>{selectedCrypto1?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
+                <p className='w-1/3 text-center px-2'>
+                {selectedCrypto1?.quote?.USD?.price && cryptoPrice(selectedCrypto1?.quote?.USD?.price) || '0.00'}
+                  </p>
               </div>
 
               <button className='rotate-90 md:rotate-0' onClick={handleSwap}>
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full items-center gap-6 sm:max-w-[250px] max-w-[350px] rounded-md bg-[#23232E]'>
+              <div className='flex w-full items-center gap-6 sm:max-w-[290px] max-w-[350px] rounded-md bg-[#23232E]'>
                 {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
@@ -200,60 +907,126 @@ function Home() {
                     <option value="xrp">XRP</option>
                     <option value="usdt">Tether USDT</option>
                 </select> */}
+                  
                 <DropDown
+                  isForCrypto={true}
                   displayLable={true}
-                  options={cryptoAllData || cryptoOptions}
+                  options={cryptoAllData}
                   selectedValue={selectedCrypto2}
                   onSelect={setSelectedCrypto2} 
                 />
-                <p className='w-1/3 text-center px-2'>{selectedCrypto2?.quote?.USD?.price.toFixed(2) || '0.00'}</p>
+                <p className='w-1/3 text-center px-2'>
+                  {selectedCrypto2?.quote?.USD?.price && cryptoPrice(selectedCrypto2?.quote?.USD?.price) || '0.00'}
+                </p>
               </div>
             </div>
 
             <hr className='border border-[#ffffff50] my-6 w-[95%]'/>
             
-            <section className='text-center'>   
+            <section className='text-center w-[95%] sm:w-fit'>   
               <p className='text-xl sm:text-4xl font-semibold '>
-                <span className='uppercase'> eth </span> 
-                  with the market cap of 
-                <span className='uppercase'> btc </span>
+                { selectedCrypto1 && selectedCrypto1 && (
+                  <>
+                    <span className='uppercase'> {selectedCrypto1?.code} </span> 
+                      with the market cap of
+                    <span className='uppercase'> {selectedCrypto2?.code} </span>
+
+                    
+                    {/* <span className='uppercase'> eth </span>  
+                      with the market cap of
+                    <span className='uppercase'> btc </span> */}
+                  </>
+                )}
               </p>
 
-              <div className='flex justify-center items-center gap-4 mt-3'>
+              <div className='flex justify-center items-center gap-2 mt-3'>
                 <img src={bitcoin_sm} alt="icon" />
-                <p className='text-md sm:text-2xl'>400 B <span className='text-[#0dc71c] font-bold'> {`(5.15x)`} </span></p>
+                { selectedCrypto1 && selectedCrypto1 && (
+                    <>
+                      <p className='text-md sm:text-2xl'>
+
+                        ${marketCap && Number(marketCap)?.toLocaleString('en-US')} 
+                        
+                        { marketCap && (
+                          <>
+                            <span className='text-[#0dc71c] font-bold'>{` (${getXreturn(marketCap)}x)`}</span>
+                          </>
+                        )}
+                      </p>
+                    </>
+                  )
+                }
               </div>
 
-              <p className='mt-2'>
-                <span> ETH  </span>
-                is 
-                <span> 0.32x </span>
-                under
-                <span> BTC </span>
-              </p>
+              { selectedCrypto1 && selectedCrypto1 && (
+                <>
+                  <p className='mt-2'>
+                    <span> {selectedCrypto1?.code} </span>
+                    is 
+                    
+                    <span className='text-base'> 
+                      {` 
+                        ${(selectedCrypto1?.quote?.USD?.market_cap / 
+                          selectedCrypto2?.quote?.USD?.market_cap).toFixed(2)
+                        }x
+                      `}
+                    </span>
+
+                    { 
+                      (selectedCrypto1?.quote?.USD?.market_cap > selectedCrypto2?.quote?.USD?.market_cap)
+                      ? 'ABOVE' : 'UNDER'}
+                    {/* {getUnderAbove()} */}
+                    
+                    <span> {selectedCrypto2?.code} </span>
+                  </p>
+                </>
+              )}
+
 
               <hr className='border border-[#ffffff50] my-6'/>
 
               {/* range input */}
-              <div className='flex items-center gap-8'>
-                <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer' />
+              <div className='flex items-center gap-2'>
+
+                <ProgressBar 
+                  completed={handleProgress1()} 
+                  className='w-1/2'
+                  height='6px'
+                  isLabelVisible={false}
+                  bgColor={handleProgress1() >= handleProgress2() ? "#00C410" : '#F30606'}
+                />
+
+                {/* <input type="range" className='w-1/2 h-[6px] accent-[#F30606] cursor-pointer' /> */}
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
-                  <img src={bitcoin_sm} alt="icon" />
-                    <p className='text-sm sm:text-lg'>$ 23,434234.00 
-                      <span className='text-[#F67611]'> {`(5.15x)`} </span>
+                  <img src={bitcoin_sm} alt="icon" className='max-w-5 max-h-5 sm:max-w-6 sm:max-h-6' />
+                    <p className='text-sm sm:text-base'>
+                      ${
+                        Number((selectedCrypto1?.quote?.USD?.market_cap * currencyFlag ).toFixed(2)).toLocaleString('en-US')
+                      }
                     </p>
                 </div>
               </div>
 
               {/* range input */}
-              <div className='flex mt-3 items-center gap-8'>
-                <input type="range" className='w-1/2 h-[6px] accent-[#00C410] cursor-pointer'/>
+              <div className='flex mt-3 items-center gap-2'>
+
+                <ProgressBar 
+                  completed={handleProgress2()} 
+                  className='w-1/2'
+                  height='6px'
+                  isLabelVisible={false}
+                  bgColor={handleProgress2() >= handleProgress1() ? "#00C410" : '#F30606'}
+                />
+
+                {/* <input type="range" className='w-1/2 h-[6px] accent-[#00C410] cursor-pointer'/> */}
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
-                  <img src={bitcoin_sm} alt="icon" />
-                    <p className='text-sm sm:text-lg'>$ 23,434234.00 
-                      <span className='text-[#0dc71c]'> {`(5.15x)`} </span>
+                  <img src={bitcoin_sm} alt="icon" className='max-w-5 max-h-5 sm:max-w-6 sm:max-h-6' />
+                    <p className='text-sm sm:text-base'>
+                      ${
+                        Number(selectedCrypto2?.quote?.USD?.market_cap?.toFixed(2)).toLocaleString('en-US')
+                      }
                     </p>
                 </div>
               </div>
