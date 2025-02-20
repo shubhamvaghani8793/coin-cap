@@ -12,7 +12,9 @@ const GoalTracker = () => {
       <img src='converterbg2.png' alt='' className='absolute top-52 right-0  w-[350px] h-[700px] -z-50 md:top-0 md:h-[800px] md:w-auto' />
       <img src='goaltrackerbg.svg' alt='' className='absolute bottom-0 left-0 -z-50' />
 
-      <div className='flex flex-col-reverse justify-between items-center gap-3 mt-0 md:mt-5 mx-4 mb-20 md:mb-96 md:flex-row xl:mx-12'>
+<div className='w-full flex justify-center'>
+
+      <div className='max-w-[1440px] flex flex-col-reverse justify-between items-center gap-3 mt-0 md:mt-5 mx-4 mb-20 md:mb-96 md:flex-row xl:mx-12'>
         <div className='max-w-[500px] md:max-w-[700px] xl:max-w-[900px] place-items-center text-center md:place-items-start md:text-start'>
           <p className='text-2xl  font-semibold mt-5 md:mt-0 sm:text-5xl lg:text-7xl xl:text-8xl'>Track Your <span className='text-brandOrange '>Crypto Goals</span> in the App</p>
           <p className='text-[25px] font-semibold lg:text-[65px] my-12'>Download the App</p>
@@ -42,6 +44,7 @@ const GoalTracker = () => {
           <img src='mobile.png' alt='mobile' className='h-full' />
         </div>
       </div>
+</div>
       <Footer />
     </>
   )

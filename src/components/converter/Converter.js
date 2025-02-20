@@ -23,10 +23,12 @@ const currencyOptions = AllCurrencyData.supported_codes.map(([symbol, name]) => 
 
 const Converter = () => {
     const [convertType, setConvertType] = useState("1");
-    const [selectedFrom, setSelectedFrom] = useState(null);
-    const [selectedTo, setSelectedTo] = useState(null);
-    const [inputFrom, setInputFrom] = useState("");
-    const [inputTo, setInputTo] = useState("");
+    const [selectedCrypto1, setSelectedCrypto1] = useState(null);
+    const [selectedCrypto2, setSelectedCrypto2] = useState(null);
+    const [inputValue1, setInputValue1] = useState("");
+    const [inputValue2, setInputValue2] = useState("");
+    const [isSwapped, setIsSwapped] = useState(false);
+    const [lastEditedInput, setLastEditedInput] = useState(null);
 
     // Dynamically set options based on conversion type
     let fromOptions = [];
@@ -49,44 +51,93 @@ const Converter = () => {
     // Set default selections when conversion type changes
     useEffect(() => {
         if (fromOptions.length > 0) {
-            setSelectedFrom(fromOptions[0]);
-            setInputFrom("");
+            setSelectedCrypto1(fromOptions[0]);
+            setInputValue1("");
         }
         if (toOptions.length > 0) {
             if (convertType === "1" || convertType === "3") {
-                setSelectedTo(toOptions[1] || toOptions[0]);
+                setSelectedCrypto2(toOptions[1] || toOptions[0]);
             } else {
-                setSelectedTo(toOptions[0]);
+                setSelectedCrypto2(toOptions[0]);
             }
-            setInputTo("");
+            setInputValue2("");
         }
     }, [convertType]);
 
-    // Call API When Dropdown Selection Changes
     useEffect(() => {
-        if (convertType === "3" && inputFrom) {
-            fetchExchangeRate(selectedFrom?.value, selectedTo?.value, inputFrom);
+        if (fromOptions.length > 0) {
+            setSelectedCrypto1(fromOptions[0]);
         }
-    }, [selectedFrom, selectedTo]);
+        if (toOptions.length > 0) {
+            setSelectedCrypto2(toOptions[1]);
+        }
+    }, [convertType]);
 
-    // Automatically Convert When Currency Selection Changes
+    // Recalculate conversion when convertType changes
     useEffect(() => {
-        if (convertType === "2" && inputFrom) {
-            const fromCrypto = cryptoData.find(c => c.value === selectedFrom.value);
-            if (fromCrypto) {
-                const amountInUsd = parseFloat(inputFrom) * fromCrypto.price;
-                fetchCurrencyRate(selectedTo.value, amountInUsd);
+        if (!inputValue1 || !selectedCrypto1 || !selectedCrypto2) return;
+
+        if (convertType === "1") { // Crypto to Crypto
+            const fromCrypto = cryptoData.find(c => c.value === selectedCrypto1.value);
+            const toCrypto = cryptoData.find(c => c.value === selectedCrypto2.value);
+
+            if (fromCrypto && toCrypto) {
+                const convertedValue = (parseFloat(inputValue1) * fromCrypto.price) / toCrypto.price;
+                setInputValue2(convertedValue.toFixed(8));
             }
+        } else if (convertType === "2") { // Crypto to Currency
+            const fromCrypto = cryptoData.find(c => c.value === selectedCrypto1.value);
+            if (fromCrypto) {
+                const amountInUsd = parseFloat(inputValue1) * fromCrypto.price;
+                fetchCurrencyRate(selectedCrypto2.value, amountInUsd);
+            }
+        } else if (convertType === "3") { // Currency to Currency
+            fetchExchangeRate(selectedCrypto1.value, selectedCrypto2.value, inputValue1);
         }
-    }, [selectedTo, selectedFrom]);
+    }, [convertType, selectedCrypto1, selectedCrypto2]);
 
-    // Swap value of DroDown
+
+    // Swap value of DropDown
     const swapValues = () => {
-        setSelectedFrom(selectedTo);
-        setSelectedTo(selectedFrom);
-        setInputFrom(inputTo);
-        setInputTo(inputFrom);
+        if (convertType === "2") {
+            const tempCrypto1 = selectedCrypto1;
+            const tempCrypto2 = selectedCrypto2;
+
+            if (!isSwapped) {
+                setSelectedCrypto1(currencyOptions.find(opt => opt.label === tempCrypto2.label) || currencyOptions[0]);
+                setSelectedCrypto2(cryptoData.find(opt => opt.label === tempCrypto1.label) || cryptoData[0]);
+            } else {
+                setSelectedCrypto1(cryptoData.find(opt => opt.label === tempCrypto2.label) || cryptoData[0]);
+                setSelectedCrypto2(currencyOptions.find(opt => opt.label === tempCrypto1.label) || currencyOptions[0]);
+            }
+        } else {
+            const tempCrypto1 = selectedCrypto1;
+            setSelectedCrypto1(selectedCrypto2);
+            setSelectedCrypto2(tempCrypto1);
+        }
+
+        // Swap input values and last edited input
+        const tempValue1 = inputValue1;
+        setInputValue1(inputValue2);
+        setInputValue2(tempValue1);
+        setLastEditedInput(lastEditedInput === 'input1' ? 'input2' : 'input1');
+        setIsSwapped(!isSwapped);
     };
+
+    const getOptions1 = () => {
+        if (convertType === "2") {
+            return isSwapped ? currencyOptions : cryptoData;
+        }
+        return convertType === "3" ? currencyOptions : cryptoData;
+    };
+
+    const getOptions2 = () => {
+        if (convertType === "2") {
+            return isSwapped ? cryptoData : currencyOptions;
+        }
+        return convertType === "1" ? cryptoData : currencyOptions;
+    };
+
 
     // Fetch Exchange Rate for Currency to Currency
     const fetchExchangeRate = async (from, to, amount) => {
@@ -95,7 +146,7 @@ const Converter = () => {
             const data = await response.json();
 
             if (data.conversion_result) {
-                setInputTo(data.conversion_result.toFixed(2));
+                setInputValue2(data.conversion_result.toFixed(2));
             } else {
                 console.error("Exchange rate fetch failed:", data);
             }
@@ -107,46 +158,134 @@ const Converter = () => {
     // Fetch Exchange Rate for Crypto to Currency
     const fetchCurrencyRate = async (toCurrency, amountInUsd) => {
         try {
-            const response = await fetch(`https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/USD/${toCurrency}/${amountInUsd}`);
+            const response = await fetch(
+                `https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/USD/${toCurrency}/${amountInUsd}`
+            );
             const data = await response.json();
-
             if (data.conversion_result) {
-                setInputTo(data.conversion_result.toFixed(2));
-            } else {
-                console.error("Currency exchange failed:", data);
+                setInputValue2(data.conversion_result.toFixed(2));
             }
         } catch (error) {
             console.error("Error fetching currency rate:", error);
         }
     };
 
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setInputFrom(value);
+    const handleInputChange = (value, isSecondInput) => {
+        if (isSecondInput) {
+            setInputValue2(value);
+            setLastEditedInput('input2');
+        } else {
+            setInputValue1(value);
+            setLastEditedInput('input1');
+        }
 
-        if (!value || !selectedFrom || !selectedTo) return;
+        if (!value || !selectedCrypto1 || !selectedCrypto2) return;
 
         if (convertType === "1") { // Crypto to Crypto
-            const fromCrypto = cryptoData.find(c => c.value === selectedFrom.value);
-            const toCrypto = cryptoData.find(c => c.value === selectedTo.value);
+            const fromCrypto = cryptoData.find(c => c.value === (isSecondInput ? selectedCrypto2.value : selectedCrypto1.value));
+            const toCrypto = cryptoData.find(c => c.value === (isSecondInput ? selectedCrypto1.value : selectedCrypto2.value));
 
             if (fromCrypto && toCrypto) {
                 const convertedValue = (parseFloat(value) * fromCrypto.price) / toCrypto.price;
-                setInputTo(convertedValue.toFixed(8));
+                if (isSecondInput) {
+                    setInputValue1(convertedValue.toFixed(8));
+                } else {
+                    setInputValue2(convertedValue.toFixed(8));
+                }
             }
         } else if (convertType === "2") { // Crypto to Currency
-            const fromCrypto = cryptoData.find(c => c.value === selectedFrom.value);
-
-            if (fromCrypto) {
-                const amountInUsd = parseFloat(value) * fromCrypto.price;
-                fetchCurrencyRate(selectedTo.value, amountInUsd);
+            if (!isSwapped) {
+                const fromCrypto = cryptoData.find(c => c.value === selectedCrypto1.value);
+                if (isSecondInput) {
+                    // Convert from currency to crypto
+                    reverseFetchCurrencyRate(selectedCrypto2.value, value, selectedCrypto1.value);
+                } else {
+                    // Convert from crypto to currency
+                    if (fromCrypto) {
+                        const amountInUsd = parseFloat(value) * fromCrypto.price;
+                        fetchCurrencyRate(selectedCrypto2.value, amountInUsd);
+                    }
+                }
+            } else {
+                const fromCrypto = cryptoData.find(c => c.value === selectedCrypto2.value);
+                if (isSecondInput) {
+                    // Convert from crypto to currency
+                    if (fromCrypto) {
+                        const amountInUsd = parseFloat(value) * fromCrypto.price;
+                        fetchCurrencyRate(selectedCrypto1.value, amountInUsd);
+                    }
+                } else {
+                    // Convert from currency to crypto
+                    reverseFetchCurrencyRate(selectedCrypto1.value, value, selectedCrypto2.value);
+                }
             }
         } else if (convertType === "3") { // Currency to Currency
-            fetchExchangeRate(selectedFrom.value, selectedTo.value, value);
+            handleCurrencyToCurrency(value, isSecondInput);
+        }
+    };
+
+    // Separate function for currency-to-currency conversion
+    const handleCurrencyToCurrency = async (value, isSecondInput) => {
+        try {
+            const amount = parseFloat(value);
+            if (isSecondInput) {
+                const response = await fetch(
+                    `https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
+                );
+                const data = await response.json();
+                if (data.conversion_result) {
+                    setInputValue1(data.conversion_result.toFixed(2));
+                }
+            } else {
+                const response = await fetch(
+                    `https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
+                );
+                const data = await response.json();
+                if (data.conversion_result) {
+                    setInputValue2(data.conversion_result.toFixed(2));
+                }
+            }
+        } catch (error) {
+            console.error("Error in currency to currency conversion:", error);
+        }
+    };
+
+    // Add this new function for reverse exchange rate calculation
+    const reverseFetchExchangeRate = async (from, to, amount) => {
+        try {
+            const response = await fetch(`https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/${from}/${to}/${amount}`);
+            const data = await response.json();
+
+            if (data.conversion_result) {
+                setInputValue1(data.conversion_result.toFixed(2));
+            } else {
+                console.error("Exchange rate fetch failed:", data);
+            }
+        } catch (error) {
+            console.error("Error fetching exchange rate:", error);
         }
     };
 
 
+    // New function to handle reverse currency conversion
+    const reverseFetchCurrencyRate = async (fromCurrency, amount, toCrypto) => {
+        try {
+            // First convert to USD
+            const response = await fetch(`https://v6.exchangerate-api.com/v6/2130ddb38e6fc933d9d75976/pair/${fromCurrency}/USD/${amount}`);
+            const data = await response.json();
+
+            if (data.conversion_result) {
+                const amountInUsd = data.conversion_result;
+                const cryptoPrice = cryptoData.find(c => c.value === toCrypto)?.price || 0;
+                if (cryptoPrice > 0) {
+                    const cryptoAmount = amountInUsd / cryptoPrice;
+                    setInputValue1(cryptoAmount.toFixed(8));
+                }
+            }
+        } catch (error) {
+            console.error("Error in reverse currency conversion:", error);
+        }
+    };
 
     return (
         <>
@@ -181,18 +320,18 @@ const Converter = () => {
                                 <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
                                         <DropDown2
-                                            options={fromOptions}
-                                            selectedValue={selectedFrom}
-                                            onSelect={setSelectedFrom}
+                                            options={getOptions1()}
+                                            selectedValue={selectedCrypto1}
+                                            onSelect={setSelectedCrypto1}
                                             displayLabel={true}
                                         />
                                     </div>
                                     <input
                                         type='number'
                                         className='text-white outline-none h-full bg-[#383848] rounded-lg w-20 pl-2 sm:w-28'
-                                        placeholder={`1 ${selectedFrom?.value || ""}`}
-                                        value={inputFrom}
-                                        onChange={handleInputChange}
+                                        placeholder={`1 ${selectedCrypto1?.value || ""}`}
+                                        value={inputValue1}
+                                        onChange={(e) => handleInputChange(e.target.value, false)}
                                     />
                                 </div>
 
@@ -206,25 +345,25 @@ const Converter = () => {
                                 <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
                                         <DropDown2
-                                            options={toOptions}
-                                            selectedValue={selectedTo}
-                                            onSelect={setSelectedTo}
+                                            options={getOptions2()}
+                                            selectedValue={selectedCrypto2}
+                                            onSelect={setSelectedCrypto2}
                                             displayLabel={true}
                                         />
                                     </div>
                                     <input
                                         type='number'
                                         className='text-white bg-[#383848] rounded-lg w-20 h-full pl-2 sm:w-28 outline-none'
-                                        placeholder={`1 ${selectedTo?.value || ""}`}
-                                        value={inputTo}
-                                        readOnly
+                                        placeholder={`1 ${selectedCrypto2?.value || ""}`}
+                                        value={inputValue2}
+                                        onChange={(e) => handleInputChange(e.target.value, true)}
                                     />
                                 </div>
                             </div>
                         </div>
                         <hr className='border-px border-[#676767] mt-10' />
                         <p className="text-gray-400 text-sm mt-4 mb-20">
-                            1 USD = 1
+                            {inputValue1} {selectedCrypto1?.value} = {inputValue2} {selectedCrypto2?.value}
                         </p>
                     </div>
                 </div>
