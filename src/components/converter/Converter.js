@@ -101,7 +101,7 @@ const Converter = () => {
         return () => {
             if (timer) clearTimeout(timer);
         };
-    }, [convertType, selectedCrypto1, selectedCrypto2, inputValue1, isSwapped]);
+    }, [convertType, selectedCrypto1, selectedCrypto2]);
 
     const handleInputChange = (value, isSecondInput) => {
         if (timer) clearTimeout(timer);
