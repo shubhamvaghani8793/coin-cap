@@ -76,7 +76,7 @@ const Converter = () => {
 
                 if (fromCrypto && toCrypto) {
                     const convertedValue = (parseFloat(inputValue1) * fromCrypto.price) / toCrypto.price;
-                    setInputValue2(convertedValue.toFixed(8));
+                    setInputValue2(convertedValue.toFixed(2));
                 }
             } else if (convertType === "2") {
                 if (!isSwapped) {
@@ -124,9 +124,9 @@ const Converter = () => {
                 if (fromCrypto && toCrypto) {
                     const convertedValue = (parseFloat(value) * fromCrypto.price) / toCrypto.price;
                     if (isSecondInput) {
-                        setInputValue1(convertedValue.toFixed(8));
+                        setInputValue1(convertedValue.toFixed(2));
                     } else {
-                        setInputValue2(convertedValue.toFixed(8));
+                        setInputValue2(convertedValue.toFixed(2));
                     }
                 }
             } else if (convertType === "2") {
@@ -246,7 +246,7 @@ const Converter = () => {
                     const cryptoPrice = cryptoData.find(c => c.value === toCrypto)?.price || 0;
                     if (cryptoPrice > 0) {
                         const cryptoAmount = amountInUsd / cryptoPrice;
-                        setInputValue2(cryptoAmount.toFixed(8));
+                        setInputValue2(cryptoAmount.toFixed(2));
                     }
                 } else {
                     if (data.conversion_result) {
@@ -254,7 +254,7 @@ const Converter = () => {
                         const cryptoPrice = cryptoData.find(c => c.value === toCrypto)?.price || 0;
                         if (cryptoPrice > 0) {
                             const cryptoAmount = amountInUsd / cryptoPrice;
-                            setInputValue1(cryptoAmount.toFixed(8));
+                            setInputValue1(cryptoAmount.toFixed(2));
                         }
                     }
                 }
