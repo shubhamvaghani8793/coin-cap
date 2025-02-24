@@ -12,6 +12,7 @@ import { AllCurrencyData } from './currencyDB';
 const cryptoData = DummyCryptoData?.data.map(item => ({
     label: item.name,
     value: item.symbol,
+    id: item.id,
     price: item.quote.USD.price
 }));
 

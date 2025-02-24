@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 
-export default function DropDown2({ options, selectedValue, onSelect, displayLabel }) {
+export default function DropDown2({ options, selectedValue, onSelect }) {
   return (
     <div className="max-w-40 w-full">
       <Select
@@ -9,7 +9,18 @@ export default function DropDown2({ options, selectedValue, onSelect, displayLab
         value={selectedValue}
         onChange={onSelect}
         isSearchable={true}
-        getOptionLabel={(e) => e.label} // Show both label and symbol
+        getOptionLabel={(e) => (
+          <div className="flex items-center">
+            {
+              e.id && <img
+                src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${e.id}.png`}
+                alt=""
+                className="w-5 h-5 mr-2"
+              />
+            }
+            <span>{e.label}</span>
+          </div>
+        )}
         getOptionValue={(e) => `${e.label} (${e.value})`} // Ensure correct value selection
         styles={{
           control: (provided) => ({
@@ -51,12 +62,12 @@ export default function DropDown2({ options, selectedValue, onSelect, displayLab
             overflowX: 'hidden',  // Hide horizontal overflow
           }),
           menuList: (provided) => ({
-            overflowY: 'auto', 
-            maxHeight: '200px',  
+            overflowY: 'auto',
+            maxHeight: '200px',
             scrollbarWidth: 'thin',
-            overflowX: 'hidden',  
-            msOverflowStyle: 'auto', 
-            WebkitOverflowScrolling: 'touch', 
+            overflowX: 'hidden',
+            msOverflowStyle: 'auto',
+            WebkitOverflowScrolling: 'touch',
           })
         }}
       />
