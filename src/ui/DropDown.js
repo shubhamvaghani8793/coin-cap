@@ -1,4 +1,4 @@
-  import React, { useMemo, useState } from "react";
+  import React, { useEffect, useMemo, useState } from "react";
   import Select from "react-select";
 
   export default function DropDown({
@@ -24,29 +24,82 @@
       setSearchInput(input)
     }
 
-    let filteredOptions = [];
+    const [displayedOptions, setDisplayedOptions] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+
+    // Function to load more options when the user scrolls to the bottom
+    const loadMoreOptions = () => {
+        const currentLength = displayedOptions?.length;
+        const nextOptions = options?.slice(currentLength, currentLength + 10);
+        
+        if (nextOptions?.length > 0) {
+            setDisplayedOptions((prevOptions) => [...prevOptions, ...nextOptions]);
+            setHasMore(true); // No more options to load
+        } else {
+            setHasMore(false); // No more options to load
+        }
+    };
+
+    useEffect(() => {
+        // Initially load 10 options
+        loadMoreOptions();
+    }, [options]);
+
+    const handleScroll = (e) => {
+      const bottom = e.target.scrollHeight === e.target.scrollTop + e.target.clientHeight;
+            
+      if (bottom && hasMore) {
+          loadMoreOptions();
+      }
+    };
+
+    const customMenuList = (props) => {
+      return (
+          <div
+              {...props.innerProps}
+              ref={props.innerRef}
+              onScroll={handleScroll}
+              style={{ overflowY: 'auto', maxHeight: '100px' }}
+          >
+              {props.children}
+          </div>
+      );
+  };
+
+  let filteredOptions = [];
     if (isForCrypto) {
       filteredOptions = options?.filter(option => 
             option?.label?.toLowerCase()?.includes(searchInput?.toLowerCase())
           ).slice(0, 10);
     }else{
       filteredOptions = options?.filter(option => 
-            option?.label?.toLowerCase()?.includes(searchInput?.toLowerCase())
+            option?.value?.toLowerCase()?.includes(searchInput?.toLowerCase())
           ).slice(0, 10);
     }
+  
+    const displayedOptionsWithSearch = searchInput ? filteredOptions : displayedOptions;
 
     return (
       <div className={` ${isForCrypto ? 'min-w-40' : ''} max-w-fit w-full `}>
         <Select
-          options={filteredOptions || options}
+          options={displayedOptionsWithSearch}
           value={selectedValue}
+          
+          onMenuScrollToBottom={handleScroll}
+          menuList={customMenuList}
           onChange={onSelect}
           isSearchable={true}
           onInputChange={handleInputChage}
           getOptionLabel={(e) => (
             <div className="flex items-center justify-between">
-              {/* <img src={e.img} alt="" className="w-5 h-5 mr-2" /> */}
-              <span className="">{displayLable ? e.label : e.code}</span>
+              <div className="flex gap-1 items-center">
+                {
+                  isForCrypto && (
+                    <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${e?.id}.png`} alt="coin" className="w-5 h-5 mr-2" />
+                  )
+                }
+                <span className="">{displayLable ? e.label : e.code}</span>
+              </div>
               {isForCrypto && (
                 <>
                   {/* console.log(e.quote.USD.market_cap) */}
