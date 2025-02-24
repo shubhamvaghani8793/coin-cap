@@ -4,7 +4,7 @@ import SmallCalculator from '../smallCalculator/SmallCalculator'
 
 function Popular() {
   return (
-    <div className='flex flex-col relative max-w-[1400px] mx-auto items-center px-3 text-center'>
+    <div className='flex flex-col relative max-w-[1400px] mx-auto items-center px-3 mt-[200px] text-center'>
         <p className='text-3xl sm:text-5xl font-semibold'>Most Popular Crypto</p>
         <p className='text-brandOrange text-3xl sm:text-5xl font-semibold mt-1 sm:mt-3'>Market Cap Calculation</p>
 

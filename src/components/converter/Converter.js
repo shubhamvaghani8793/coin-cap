@@ -4,25 +4,13 @@ import Navbar from '../navbar/Navbar';
 import { FaAngleDown } from "react-icons/fa6";
 import Footer from '../footer/Footer';
 import Sidebar from '../sidebar/Sidebar';
-import { DummyCryptoData } from '../home/db';
 import DropDown2 from '../../ui/DropDown2';
-import { AllCurrencyData } from './currencyDB';
-
-// Prepare Crypto Data for Dropdown with prices
-const cryptoData = DummyCryptoData?.data.map(item => ({
-    label: item.name,
-    value: item.symbol,
-    id: item.id,
-    price: item.quote.USD.price
-}));
-
-// Prepare Currency Data for Dropdown
-const currencyOptions = AllCurrencyData.supported_codes.map(([symbol, name]) => ({
-    label: name,
-    value: symbol
-}));
+import { getAllCryptoList, getCurrencyFlag } from '../../api/apiService';
+import { Puff } from 'react-loader-spinner';
 
 const Converter = () => {
+    const [cryptoData, setCryptoData] = useState([]);
+    const [currencyOptions, setCurrencyOptions] = useState([]);
     const [convertType, setConvertType] = useState("1");
     const [selectedCrypto1, setSelectedCrypto1] = useState(null);
     const [selectedCrypto2, setSelectedCrypto2] = useState(null);
@@ -31,6 +19,69 @@ const Converter = () => {
     const [isSwapped, setIsSwapped] = useState(false);
     const [lastEditedInput, setLastEditedInput] = useState(null);
     const [timer, setTimer] = useState(null);
+    const [loading, setLoading] = useState(true); // New state for loading
+
+    useEffect(() => {
+        const fetchCryptoAndCurrencyData = async () => {
+            try {
+                const [cryptoResponse, currencyResponse] = await Promise.all([
+                    getAllCryptoList(),
+                    getCurrencyFlag()
+                ]);
+
+                if (cryptoResponse?.data?.data) {
+                    const cryptoList = cryptoResponse.data.data.map(item => ({
+                        label: item.name,
+                        value: item.symbol,
+                        id: item.id,
+                        price: item.quote.USD.price
+                    }));
+                    setCryptoData(cryptoList);
+                    
+                    // Set initial crypto selection immediately after data is available
+                    if (cryptoList.length > 0) {
+                        setSelectedCrypto1(cryptoList[0]);
+                    }
+                }
+
+                if (currencyResponse?.supported_codes) {
+                    const currencyList = currencyResponse.supported_codes.map(([symbol, name]) => ({
+                        label: name,
+                        value: symbol
+                    }));
+                    setCurrencyOptions(currencyList);
+                    
+                    // If we need to set a currency option for the second dropdown
+                    if (convertType === "2" && currencyList.length > 0) {
+                        setSelectedCrypto2(currencyList[0]);
+                    }
+                }
+
+                // After both data types are loaded, set the second dropdown based on conversion type
+                if (cryptoResponse?.data?.data && currencyResponse?.supported_codes) {
+                    const cryptoList = cryptoResponse.data.data.map(item => ({
+                        label: item.name,
+                        value: item.symbol,
+                        id: item.id,
+                        price: item.quote.USD.price
+                    }));
+                    
+                    if (convertType === "1" && cryptoList.length > 1) {
+                        setSelectedCrypto2(cryptoList[1]); // Set second crypto if available
+                    } else if (convertType === "1" && cryptoList.length === 1) {
+                        setSelectedCrypto2(cryptoList[0]); // Use first crypto if that's all we have
+                    }
+                }
+
+            } catch (error) {
+                console.error("Error fetching crypto or currency data:", error);
+            } finally {
+                setLoading(false); // Set loading to false in finally block
+            }
+        };
+
+        fetchCryptoAndCurrencyData();
+    }, []);
 
     // Dynamically set options based on conversion type
     let fromOptions = [];
@@ -165,7 +216,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${from}/${to}/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${from}/${to}/${amount}`);
                 const data = await response.json();
 
                 if (data.conversion_result) {
@@ -185,7 +236,7 @@ const Converter = () => {
         const newTimer = setTimeout(async () => {
             try {
                 const response = await fetch(
-                    `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/USD/${toCurrency}/${amountInUsd}`
+                    `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/USD/${toCurrency}/${amountInUsd}`
                 );
                 const data = await response.json();
                 if (convertType === "2" && isSwapped) {
@@ -211,7 +262,7 @@ const Converter = () => {
                 const amount = parseFloat(value);
                 if (isSecondInput) {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -219,7 +270,7 @@ const Converter = () => {
                     }
                 } else {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -239,7 +290,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${fromCurrency}/USD/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${fromCurrency}/USD/${amount}`);
                 const data = await response.json();
 
                 if (convertType === "2" && isSwapped) {
@@ -306,6 +357,23 @@ const Converter = () => {
         return convertType === "1" ? cryptoData : currencyOptions;
     };
 
+    if (loading || !selectedCrypto1 || !selectedCrypto2) {
+        return (
+            <>
+                <div className='flex justify-center items-center h-screen'>
+                    <Puff
+                        visible={true}
+                        height="80"
+                        width="80"
+                        color="#F84F0D"
+                        ariaLabel="puff-loading"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                    />
+                </div>
+            </>
+        )
+    }
     return (
         <>
             <Navbar />
@@ -335,7 +403,7 @@ const Converter = () => {
                                 </div>
                             </div>
 
-                            <div className="mt-16 flex flex-col items-center md:flex-row gap-3 md:gap-0">
+                            <div className="mt-16 flex flex-col w-full items-center md:flex-row gap-3 md:gap-0">
                                 <div className="flex items-center bg-[#23232E] w-full justify-between h-11 rounded-md gap-2">
                                     <div className='flex gap-2 items-center w-[165px] md:w-[225px] sm:w-[225px]'>
                                         <DropDown2
@@ -347,7 +415,7 @@ const Converter = () => {
                                     </div>
                                     <input
                                         type='number'
-                                        className='text-white outline-none h-full bg-[#383848] rounded-lg w-20 pl-2 sm:w-28'
+                                        className='text-white outline-none h-full bg-[#383848] rounded-lg w-20 pl-2 sm:w-32'
                                         placeholder={`1 ${selectedCrypto1?.value || ""}`}
                                         value={inputValue1}
                                         onChange={(e) => handleInputChange(e.target.value, false)}
@@ -372,7 +440,7 @@ const Converter = () => {
                                     </div>
                                     <input
                                         type='number'
-                                        className='text-white bg-[#383848] rounded-lg w-20 h-full pl-2 sm:w-28 outline-none'
+                                        className='text-white bg-[#383848] rounded-lg w-20 h-full pl-2 sm:w-32 outline-none'
                                         placeholder={`1 ${selectedCrypto2?.value || ""}`}
                                         value={inputValue2}
                                         onChange={(e) => handleInputChange(e.target.value, true)}
