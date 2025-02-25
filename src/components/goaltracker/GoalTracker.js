@@ -14,7 +14,7 @@ const GoalTracker = () => {
 
 <div className='w-full flex justify-center'>
 
-      <div className='max-w-[1440px] flex flex-col-reverse justify-between items-center gap-3 mt-0 md:mt-5 mx-4 mb-20 md:mb-96 md:flex-row xl:mx-12'>
+      <div className='max-w-[1440px] flex flex-col-reverse justify-between items-center gap-3 mt-0 md:mt-10 mx-4 mb-20 md:mb-80 md:flex-row xl:mx-12'>
         <div className='max-w-[500px] md:max-w-[700px] xl:max-w-[900px] place-items-center text-center md:place-items-start md:text-start'>
           <p className='text-2xl  font-semibold mt-5 md:mt-0 sm:text-5xl lg:text-7xl xl:text-8xl'>Track Your <span className='text-brandOrange '>Crypto Goals</span> in the App</p>
           <p className='text-[25px] font-semibold lg:text-[65px] my-12'>Download the App</p>

@@ -27,7 +27,7 @@ export const getCurrencyRateData = async (flag) => {
     }
 }
 
-const url = 'https://cors-anywhere.herokuapp.com/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=1000&cryptocurrency_type=all&tag=all'
+const url = 'https://thingproxy.freeboard.io/fetch/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=1000&cryptocurrency_type=all&tag=all'
 const apiKey = cmcApiKey;
 
 export const getAllCryptoList = async () => {

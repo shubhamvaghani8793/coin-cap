@@ -258,7 +258,7 @@ const handleSelectedCurrency = (value) => {
 
       {/* blurry Element */}
       
-      <div className='h-screen max-w-[1600px] mx-auto'>
+      <div className='max-w-[1600px] mx-auto'>
         {/* icons image */}
           <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
           <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
@@ -502,8 +502,9 @@ const handleSelectedCurrency = (value) => {
 
         <ContactUs />
 
-        <Footer />
       </div>
+        
+      <Footer />  
     </>
   )
 }
