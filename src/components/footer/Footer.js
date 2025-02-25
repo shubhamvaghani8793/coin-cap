@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 function Footer() {
   return (
-    <div className="bg-[#10101A] text-white py-8 pl-2 pr-2 flex items-start lg:pl-6 lg:pr-20">
+    <div className='w-full flex justify-center bg-[#10101A]'>
+    <div className="max-w-[1400px] w-full text-white py-8 pl-2 pr-2 flex items-start lg:pl-6 lg:pr-20">
       <img src='logo.svg' alt='' className='hidden md:flex' />
       <div className='w-full '>
         <div className="mt-3 mx-auto flex flex-col gap-6 justify-between items-center text-center md:items-start md:gap-2 md:text-start md:flex-row">
@@ -67,6 +68,8 @@ function Footer() {
             <NavLink to="www.youtube.com/@Coincapconvert"><img src='youtube.png' alt='' /></NavLink>
           </div>
         </div>
+        </div>
+
       </div>
     </div>
   );
