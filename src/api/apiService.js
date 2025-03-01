@@ -27,8 +27,8 @@ export const getCurrencyRateData = async (flag) => {
     }
 }
 
-const url = 'https://thingproxy.freeboard.io/fetch/https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=1000&cryptocurrency_type=all&tag=all'
-const apiKey = cmcApiKey;
+const url = 'https://coin-cap-eight.vercel.app/api/crypto'
+const apiKey = process.env.REACT_APP_CMC_API_KEY;
 
 export const getAllCryptoList = async () => {
     try {
