@@ -7,6 +7,10 @@
   padding: 0px;
 }
 
+html{
+  scroll-behavior: smooth;
+}
+
 body{
   box-sizing: border-box;
   background-color: #06060e;

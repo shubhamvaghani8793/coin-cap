@@ -21,6 +21,7 @@ import DropDown from '../../ui/DropDown'
 import { getAllCryptoList, getCurrencyFlag, getCurrencyRateData } from '../../api/apiService'
 import ProgressBar from '@ramonak/react-progress-bar'
 import { Puff, RotatingLines } from 'react-loader-spinner'
+import { DummyCryptoData } from './db'
  
 function Home() {
 
@@ -498,7 +499,13 @@ const handleSelectedCurrency = (value) => {
         />
 
         {/* Popular Crypto Component */}
-        <Popular />
+        <Popular 
+          cryptoAllData={cryptoAllData}
+          currencyFlag={currencyFlag}
+          selectedCurrency={selectedCurrency}
+          setSelectedCrypto1={setSelectedCrypto1}
+          setSelectedCrypto2={setSelectedCrypto2}
+        />
 
         <ContactUs />
 
