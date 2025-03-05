@@ -19,7 +19,6 @@ const Converter = () => {
     const [isSwapped, setIsSwapped] = useState(false);
     const [lastEditedInput, setLastEditedInput] = useState(null);
     const [timer, setTimer] = useState(null);
-    const [loading, setLoading] = useState(true); // New state for loading
 
     useEffect(() => {
         const fetchCryptoAndCurrencyData = async () => {
@@ -75,8 +74,6 @@ const Converter = () => {
 
             } catch (error) {
                 console.error("Error fetching crypto or currency data:", error);
-            } finally {
-                setLoading(false); // Set loading to false in finally block
             }
         };
 
@@ -357,23 +354,6 @@ const Converter = () => {
         return convertType === "1" ? cryptoData : currencyOptions;
     };
 
-    if (loading || !selectedCrypto1 || !selectedCrypto2) {
-        return (
-            <>
-                <div className='flex justify-center items-center h-screen'>
-                    <Puff
-                        visible={true}
-                        height="80"
-                        width="80"
-                        color="#F84F0D"
-                        ariaLabel="puff-loading"
-                        wrapperStyle={{}}
-                        wrapperClass=""
-                    />
-                </div>
-            </>
-        )
-    }
     return (
         <>
             <Navbar />
@@ -381,13 +361,13 @@ const Converter = () => {
 
             <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
             <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
-            <div className='place-items-center pt-5 mx-5 md:mx-0 md:mt-20'>
-                <div className='max-w-4xl w-full place-items-center'>
+            <div className='flex justify-center pt-5 mx-5 md:mx-0 md:mt-20'>
+                <div className='max-w-4xl w-full flex flex-col items-center'>
                     <p className='text-3xl text-white text-center font-semibold max-w-[300px] w-full sm:max-w-[500px] sm:text-5xl md:text-7xl md:max-w-[800px]'>
                         Crypto & <span className='bg-gradient-to-r from-[#F3510D] to-[#F67611] bg-clip-text text-transparent'>Currency</span> Converter
                     </p>
                     <div className="border border-[#676767] w-full md:w-auto rounded-xl mx-2 py-6 px-4 mt-10 bg-transparent sm:px-6">
-                        <div className='place-items-center'>
+                        <div className='flex flex-col items-center'>
                             <div className="relative mb-4 flex justify-center w-full md:w-auto">
                                 <select
                                     value={convertType}
