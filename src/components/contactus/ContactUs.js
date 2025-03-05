@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const ContactUs = () => {
     return (
-        <div className='relative w-full mt-40'>
+        <div id='contact' className='relative w-full mt-40'>
 
             <img src='contactusbg.svg' alt='' className='absolute right-0 bottom-[-350px] h-[900px] w-[300px] -z-50 sm:h-auto sm:w-auto ' />
             <div className='w-full flex justify-center'>                
