@@ -8,16 +8,19 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
   const [inputField, setInputField] = useState(0);
   const [textField, setTextField] = useState('');
   const [profit, setProfit] = useState(0);
-  
-  const getMarketCap = (value) => {
-    if (value >= 1_000_000_000_000 || value <= -1_000_000_000_000) {
-      return `${((Number((value / 1_000_000_000_000).toFixed(2))).toLocaleString('en-US'))}T`;  
 
+  const getMarketCap = (value) => {
+
+    if (value >= 900_000_000_000_000){
+      return '900T+'
+    }
+     else if (value >= 1_000_000_000_000 || value <= -1_000_000_000_000) {
+      return `${((parseInt((value / 1_000_000_000_000))).toLocaleString('en-US'))}T`;  
     } else if (value >= 1_000_000_000 || value <= -1_000_000_000) {
-      return `${(Number((value / 1_000_000_000).toFixed(2))).toLocaleString('en-US')}B`; 
+      return `${(parseInt((value / 1_000_000_000))).toLocaleString('en-US')}B`; 
 
     } else if (value >= 1_000_000 || value <= -1_000_000) {
-      return `${(Number((value / 1_000_000).toFixed(2))).toLocaleString('en-US')}M`; 
+      return `${(parseInt((value / 1_000_000))).toLocaleString('en-US')}M`; 
 
     } else {
       return value;  // For values smaller than a million
