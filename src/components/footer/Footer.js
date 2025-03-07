@@ -23,7 +23,7 @@ function Footer() {
           <div>
             <h3 className="text-white text-2xl font-bold">Quick NavLink</h3>
             <ul className="mt-3 text-xs md:mt-6 md:text-sm">
-              <li><a href="/" className="hover:text-orange-500 md:text-[18px]">Contact Us</a></li>
+              <li><a href="#contact" className="hover:text-orange-500 md:text-[18px]">Contact Us</a></li>
             </ul>
           </div>
 
