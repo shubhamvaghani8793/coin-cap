@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 
 function Footer() {
+
   return (
     <div className='w-full flex justify-center bg-[#10101A]'>
     <div className="max-w-[1400px] w-full text-white py-8 pl-2 pr-2 flex items-start lg:pl-6 lg:pr-20">

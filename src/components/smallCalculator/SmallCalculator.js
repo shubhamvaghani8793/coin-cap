@@ -15,9 +15,6 @@ function SmallCalculator({leftCrypto, rightCrypto, currencyFlag, selectedCurrenc
             return newCurrency?.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 4 })
         }
     }
-
-    console.log(leftCrypto);
-    console.log(rightCrypto);
     
     const handleCrypto = () => {
         setSelectedCrypto1(leftCrypto)

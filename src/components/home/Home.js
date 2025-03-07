@@ -22,6 +22,9 @@ import { getAllCryptoList, getCurrencyFlag, getCurrencyRateData } from '../../ap
 import ProgressBar from '@ramonak/react-progress-bar'
 import { Puff, RotatingLines } from 'react-loader-spinner'
 import { DummyCryptoData } from './db'
+import { IoClose } from 'react-icons/io5'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
  
 function Home() {
 
@@ -36,6 +39,21 @@ function Home() {
   // currently selected currency value
   const [currencyFlag, setCurrencyFlag] = useState(1);
   const [currencyFlagCodes, setCurrencyFlagCodes] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  useEffect(() => {
+    // Disable scroll on body when modal is open
+    if (isModalOpen) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto'; // Re-enable scroll when modal is closed
+    }
+
+    // Clean up when the component is unmounted or modal state changes
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
+  }, [isModalOpen]);
 
 // select currency based on flag
 useEffect(() => {
@@ -108,7 +126,7 @@ const handleSelectedCurrency = (value) => {
         setIsFetching(false)
     }
   }
-
+  
   // currency rate
   const getCurrencyRate = async (flag) => {
     setIsLoading(true)
@@ -234,6 +252,55 @@ const handleSelectedCurrency = (value) => {
       }
   }
 
+  const setCustonCrypto = (data) => {
+
+    let marketCap = data.price * data.circulating_supply
+    
+    const NewData = {
+      circulating_supply: data.circulating_supply,
+      code: data.symbol,
+      label: data.symbol,
+      value: data.symbol,
+      isDummyCoin: true,
+      id: crypto.randomUUID(),
+      quote: {
+        USD: {
+          market_cap: marketCap,
+          price: data.price
+        }
+      }
+    }
+    
+    setCryptoAllData((pre) => [...pre, NewData])
+    setSelectedCrypto1(NewData)
+  }
+  
+  /////////////////////////////// - start - Form handling ///////////////////////////////
+
+  const initialValues = {
+    price: '',
+    circulating_supply: '',
+    symbol: '',
+  }
+
+  const validationSchema = Yup.object({
+    price: Yup.number().required("Price is required!").min(0.01, 'The number must be greater than 0'),
+    circulating_supply: Yup.number().required("Circulating supply is required!").min(0.01, 'The number must be greater than 0'),
+    symbol: Yup.string().required("Symbol is required!")
+  })
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      setCustonCrypto(values)
+      resetForm()
+      setIsModalOpen(false)
+    }
+  })
+
+  /////////////////////////////// - end - Form handling ///////////////////////////////
+
     if (isFetching) {
         return (
             <>
@@ -282,7 +349,7 @@ const handleSelectedCurrency = (value) => {
             Crypto <span className='text-brandOrange'>Market cap</span> Calculator
           </h1>
 
-          <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9 backdrop-blur-[2px]'>   
+          <div className='w-full py-8 px-2 bg-[#1d1d1d] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9'>   
            
             <div className='relative'>
                 <DropDown
@@ -330,7 +397,7 @@ const handleSelectedCurrency = (value) => {
                   selectedValue={selectedCrypto1}
                   onSelect={setSelectedCrypto1} 
                 />
-                <p className='pl-2 pr-3 break-all'>
+                <p className='pl-2 pr-3 text-sm font-medium break-all flex-1 text-right'>
                     <span className=''>{selectedCurrency?.code} </span>
                     {selectedCrypto1?.quote?.USD?.price && cryptoPrice(selectedCrypto1?.quote?.USD?.price) || '0.00'}
                 </p>
@@ -341,15 +408,7 @@ const handleSelectedCurrency = (value) => {
               </button>
               
               <div className='flex w-full justify-between items-center gap-1 sm:max-w-[40%] max-w-[350px] rounded-md bg-[#23232E]'>
-                {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
-                  name="currency"
-                >
-                    <option value="eth">Ethereum</option>
-                    <option value="btc">Bitcoin</option>
-                    <option value="xrp">XRP</option>
-                    <option value="usdt">Tether USDT</option>
-                </select> */}
-                  
+        
                 <DropDown
                   isForCrypto={true}
                   displayLable={true}
@@ -357,11 +416,20 @@ const handleSelectedCurrency = (value) => {
                   selectedValue={selectedCrypto2}
                   onSelect={setSelectedCrypto2} 
                 />
-                <p className='pl-2 pr-3 break-all'>
+                <p className='pl-2 pr-3 text-sm font-medium  break-all flex-1 text-right'>
                   <span className=''>{selectedCurrency?.code} </span> 
                   {selectedCrypto2?.quote?.USD?.price && cryptoPrice(selectedCrypto2?.quote?.USD?.price) || '0.00'}
                 </p>
               </div>
+            </div>
+
+            <div className='mt-6'>
+              <button 
+                onClick={() => setIsModalOpen(true)}
+                className='bg-[#23232E] px-3 py-1 rounded-md hover:bg-[#343444]'
+              >
+                Add Custom Coin
+              </button>
             </div>
 
             <hr className='border border-[#ffffff50] my-6 w-[95%]'/>
@@ -377,7 +445,26 @@ const handleSelectedCurrency = (value) => {
                 )}
               </p>
               <div className='flex justify-center items-center gap-2 mt-3'>
-              <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto1?.id}.png`} alt="coin" className="w-5 h-5" />
+              {
+                selectedCrypto1?.isDummyCoin ? (
+                  <>
+                    <img 
+                      src="dummyCoin.png" 
+                      alt="coin" 
+                      className="w-5 h-5"   
+                    />
+                  </>
+                ) : (
+                  <>
+                    <img 
+                      src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto1?.id}.png`} 
+                      alt="coin" 
+                      className="w-5 h-5"   
+                    />
+                  </>
+                )
+              }
+
                 { selectedCrypto1 && selectedCrypto1 && (
                     <>
                       <p className='text-md sm:text-2xl'>
@@ -403,7 +490,7 @@ const handleSelectedCurrency = (value) => {
                                     font-bold
                                 `}
                             >
-                                {` (${getXreturn()}x)`}
+                                {` (${Number(getXreturn()).toLocaleString('en-US')}x)`}
                             </span>
                           </>
                         )}
@@ -452,7 +539,26 @@ const handleSelectedCurrency = (value) => {
                 />
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
-                  <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto1?.id}.png`} alt="icon" className='max-w-5 max-h-5 sm:max-w-6 sm:max-h-6' />
+                  {
+                    selectedCrypto1?.isDummyCoin ? (
+                      <>
+                        <img
+                          src="dummyCoin.png"
+                          alt="coin"
+                          className="w-5 h-5"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto1?.id}.png`}
+                          alt="coin"
+                          className="w-5 h-5"
+                        />
+                      </>
+                    )
+                  }                    
+                    
                     <p className='text-sm sm:text-base'>
                         <span className=''>{selectedCurrency?.code} </span>
                       { 
@@ -476,7 +582,25 @@ const handleSelectedCurrency = (value) => {
                 {/* <input type="range" className='w-1/2 h-[6px] accent-[#00C410] cursor-pointer'/> */}
 
                 <div className='flex justify-end w-1/2 items-center gap-2'>
-                  <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto2?.id}.png`} alt="icon" className='max-w-5 max-h-5 sm:max-w-6 sm:max-h-6' />
+                  {
+                    selectedCrypto2?.isDummyCoin ? (
+                      <>
+                        <img
+                          src="dummyCoin.png"
+                          alt="coin"
+                          className="w-5 h-5"
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${selectedCrypto2?.id}.png`}
+                          alt="coin"
+                          className="w-5 h-5"
+                        />
+                      </>
+                    )
+                  }
                     <p className='text-sm sm:text-base'>
                     <span className=''>{selectedCurrency?.code} </span>
                     {
@@ -510,7 +634,107 @@ const handleSelectedCurrency = (value) => {
         <ContactUs />
 
       </div>
-        
+
+      {
+        isModalOpen && (
+          <div className='fixed inset-0 z-50 bg-[black] bg-opacity-60 flex items-center justify-center'>
+            <div className='relative bg-white rounded-lg p-3 max-w-[400px] w-full text-black'>
+              <div 
+                onClick={() => {
+                  formik.resetForm()
+                  setIsModalOpen(false)
+                }}
+                className='absolute right-2 top-2 cursor-pointer'>
+                <IoClose size={25}/>
+              </div>
+
+              <div className='mt-8'>
+                <form onSubmit={formik.handleSubmit}>
+                  
+                  <div className='flex flex-col'>
+                    <label htmlFor="">Price</label>
+                    <input
+                      type="number"
+                      id="price"
+                      value={formik.values.price}
+                      onChange={formik.handleChange}  
+                      className={`border mt-1 px-2 py-1 border-black rounded outline-none 
+                        focus:border-black focus:border-2
+                        ${formik.touched.price && formik.errors.price ? 'border-red-500 border-2' : ''}
+                        bg-transparent
+                      `}
+                      placeholder='e.g.20'
+                    />
+
+                    {
+                      formik.touched.price && formik.errors.price && (
+                        <span className='text-red-500 text-sm'>
+                          {formik.errors.price}
+                        </span>
+                      )
+                    }
+                  </div>
+                  
+                  <div className='mt-4 flex flex-col'>
+                    <label htmlFor="">Circulating Supply</label>
+                    <input 
+                      type="number" 
+                      id="circulating_supply"
+                      value={formik.values.circulating_supply}
+                      onChange={formik.handleChange}
+                      className={`border mt-1 px-2 py-1 border-black rounded outline-none 
+                        focus:border-black focus:border-2
+                        ${formik.touched.circulating_supply && formik.errors.circulating_supply ? 'border-red-500 border-2' : ''}
+                        bg-transparent
+                      `}
+                      placeholder='e.g.23442342'
+                    />
+
+                    {
+                      formik.touched.circulating_supply && formik.errors.circulating_supply && (
+                        <span className='text-red-500 text-sm'>
+                          {formik.errors.circulating_supply}
+                        </span>
+                      )
+                    }
+                  </div>
+
+                  <div className='mt-4 flex flex-col'>
+                    <label htmlFor="">Symbol</label>
+                    <input
+                      type="text"
+                      id='symbol'
+                      value={formik.values.symbol}
+                      onChange={formik.handleChange}
+                      className={`border mt-1 px-2 py-1 border-black rounded outline-none 
+                        focus:border-black focus:border-2
+                        ${formik.touched.symbol && formik.errors.symbol ? 'border-red-500 border-2' : ''}
+                        bg-transparent
+                      `}
+                      placeholder='e.g.BTC'
+                    />
+                    {
+                      formik.touched.symbol && formik.errors.symbol && (
+                        <span className='text-red-500 text-sm'>
+                          {formik.errors.symbol}
+                        </span>
+                      )
+                    }
+                  </div>
+                  <button 
+                    type='submit'
+                    className='text-white bg-black rounded-md px-4 float-right mt-6 py-2'
+                  > 
+                    Save
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        )
+      }  
+
+
       <Footer />  
     </>
   )

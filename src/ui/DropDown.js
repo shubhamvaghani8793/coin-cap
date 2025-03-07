@@ -94,9 +94,13 @@
             <div className="flex items-center justify-between">
               <div className="flex gap-1 items-center">
                 {
-                  isForCrypto && (
-                    <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${e?.id}.png`} alt="coin" className="w-5 h-5 mr-2" />
-                  )
+                  isForCrypto ? (
+                    !e?.isDummyCoin ? (
+                      <img src={`https://s2.coinmarketcap.com/static/img/coins/64x64/${e?.id}.png`} alt="coin" className="w-5 h-5 mr-2" />
+                    ) : (
+                      <img src="dummyCoin.png" alt="coin" className="w-5 h-5 mr-2" />
+                    )
+                  ) : null
                 }
                 <span className="">{displayLable ? e.label : e.code}</span>
               </div>

@@ -4,12 +4,6 @@ import SmallCalculator from '../smallCalculator/SmallCalculator'
 
 function Popular({cryptoAllData, currencyFlag, selectedCurrency, setSelectedCrypto1, setSelectedCrypto2}) {
   
-  const getStaticPair = () => {
-    // 1, 1027, 5426, 5994, 74, 52, 6636, 1839, 2
-  }
-
-  console.log(currencyFlag);
-  
   if (!cryptoAllData) {
     return (
       <p className='text-white'>loading....</p>
@@ -24,7 +18,15 @@ function Popular({cryptoAllData, currencyFlag, selectedCurrency, setSelectedCryp
         <div className='grid sm:grid-cols-2 w-full gap-5 max-w-[840px] mt-10'>
             <SmallCalculator 
               selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[0]}
+              leftCrypto={cryptoAllData[1]}
+              rightCrypto={cryptoAllData[0]}
+              currencyFlag={currencyFlag}
+              setSelectedCrypto1={setSelectedCrypto1}
+              setSelectedCrypto2={setSelectedCrypto2}
+            />
+            <SmallCalculator
+              selectedCurrency={selectedCurrency}
+              leftCrypto={cryptoAllData[5]}
               rightCrypto={cryptoAllData[1]}
               currencyFlag={currencyFlag}
               setSelectedCrypto1={setSelectedCrypto1}
@@ -32,31 +34,7 @@ function Popular({cryptoAllData, currencyFlag, selectedCurrency, setSelectedCryp
             />
             <SmallCalculator
               selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[1]}
-              rightCrypto={cryptoAllData[2]}
-              currencyFlag={currencyFlag}
-              setSelectedCrypto1={setSelectedCrypto1}
-              setSelectedCrypto2={setSelectedCrypto2}
-            />
-            <SmallCalculator
-              selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[2]}
-              rightCrypto={cryptoAllData[3]}
-              currencyFlag={currencyFlag}
-              setSelectedCrypto1={setSelectedCrypto1}
-              setSelectedCrypto2={setSelectedCrypto2}
-            />
-            <SmallCalculator
-              selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[4]}
-              rightCrypto={cryptoAllData[5]}
-              currencyFlag={currencyFlag}
-              setSelectedCrypto1={setSelectedCrypto1}
-              setSelectedCrypto2={setSelectedCrypto2}
-            />
-            <SmallCalculator
-              selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[6]}
+              leftCrypto={cryptoAllData[14]}
               rightCrypto={cryptoAllData[7]}
               currencyFlag={currencyFlag}
               setSelectedCrypto1={setSelectedCrypto1}
@@ -65,23 +43,55 @@ function Popular({cryptoAllData, currencyFlag, selectedCurrency, setSelectedCryp
             <SmallCalculator
               selectedCurrency={selectedCurrency}
               leftCrypto={cryptoAllData[8]}
-              rightCrypto={cryptoAllData[9]}
+              rightCrypto={cryptoAllData[1]}
               currencyFlag={currencyFlag}
               setSelectedCrypto1={setSelectedCrypto1}
               setSelectedCrypto2={setSelectedCrypto2}
             />
             <SmallCalculator
               selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[10]}
-              rightCrypto={cryptoAllData[11]}
+              leftCrypto={cryptoAllData[20]}
+              rightCrypto={cryptoAllData[1]}
               currencyFlag={currencyFlag}
               setSelectedCrypto1={setSelectedCrypto1}
               setSelectedCrypto2={setSelectedCrypto2}
             />
             <SmallCalculator
               selectedCurrency={selectedCurrency}
-              leftCrypto={cryptoAllData[12]}
-              rightCrypto={cryptoAllData[13]}
+              leftCrypto={cryptoAllData[4]}
+              rightCrypto={cryptoAllData[1]}
+              currencyFlag={currencyFlag}
+              setSelectedCrypto1={setSelectedCrypto1}
+              setSelectedCrypto2={setSelectedCrypto2}
+            /> 
+            <SmallCalculator
+              selectedCurrency={selectedCurrency}
+              leftCrypto={cryptoAllData[15]}
+              rightCrypto={cryptoAllData[0]}
+              currencyFlag={currencyFlag}
+              setSelectedCrypto1={setSelectedCrypto1}
+              setSelectedCrypto2={setSelectedCrypto2}
+            />
+            <SmallCalculator
+              selectedCurrency={selectedCurrency}
+              leftCrypto={cryptoAllData[3]}
+              rightCrypto={cryptoAllData[1]}
+              currencyFlag={currencyFlag}
+              setSelectedCrypto1={setSelectedCrypto1}
+              setSelectedCrypto2={setSelectedCrypto2}
+            />
+            <SmallCalculator
+              selectedCurrency={selectedCurrency}
+              leftCrypto={cryptoAllData[0]}
+              rightCrypto={cryptoAllData[1]}
+              currencyFlag={currencyFlag}
+              setSelectedCrypto1={setSelectedCrypto1}
+              setSelectedCrypto2={setSelectedCrypto2}
+            />
+            <SmallCalculator
+              selectedCurrency={selectedCurrency}
+              leftCrypto={cryptoAllData[7]}
+              rightCrypto={cryptoAllData[0]}
               currencyFlag={currencyFlag}
               setSelectedCrypto1={setSelectedCrypto1}
               setSelectedCrypto2={setSelectedCrypto2}
