@@ -423,14 +423,14 @@ const handleSelectedCurrency = (value) => {
               </div>
             </div>
 
-            <div className='mt-6'>
+            {/* <div className='mt-6'>
               <button 
                 onClick={() => setIsModalOpen(true)}
                 className='bg-[#23232E] px-3 py-1 rounded-md hover:bg-[#343444]'
               >
                 Add Custom Coin
               </button>
-            </div>
+            </div> */}
 
             <hr className='border border-[#ffffff50] my-6 w-[95%]'/>
             
