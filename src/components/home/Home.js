@@ -41,6 +41,8 @@ function Home() {
   const [currencyFlagCodes, setCurrencyFlagCodes] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const [modalSide, setModalSide] = useState("left")
+
   useEffect(() => {
     // Disable scroll on body when modal is open
     if (isModalOpen) {
@@ -255,11 +257,12 @@ const handleSelectedCurrency = (value) => {
   const setCustonCrypto = (data) => {
 
     let marketCap = data.price * data.circulating_supply
-    
+    let uppercaseLabel = data?.symbol?.toUpperCase();
+
     const NewData = {
       circulating_supply: data.circulating_supply,
       code: data.symbol,
-      label: data.symbol,
+      label: uppercaseLabel,
       value: data.symbol,
       isDummyCoin: true,
       id: crypto.randomUUID(),
@@ -272,10 +275,21 @@ const handleSelectedCurrency = (value) => {
     }
     
     setCryptoAllData((pre) => [...pre, NewData])
-    setSelectedCrypto1(NewData)
+
+    if (modalSide === "left") {
+      setSelectedCrypto1(NewData)
+    }else{
+      setSelectedCrypto2(NewData)
+    }
+
   }
   
   /////////////////////////////// - start - Form handling ///////////////////////////////
+
+  const [coinPrice, setCoinPrice] = useState('')
+  const [coinSupply, setCoinSupply] = useState('')
+  const [coinSymbol, setCoinSymbol] = useState('')
+
 
   const initialValues = {
     price: '',
@@ -284,8 +298,8 @@ const handleSelectedCurrency = (value) => {
   }
 
   const validationSchema = Yup.object({
-    price: Yup.number().required("Price is required!").min(0.01, 'The number must be greater than 0'),
-    circulating_supply: Yup.number().required("Circulating supply is required!").min(0.01, 'The number must be greater than 0'),
+    price: Yup.string().required("Price is required!").min(0.01, 'The number must be greater than 0'),
+    circulating_supply: Yup.string().required("Circulating supply is required!").min(0.01, 'The number must be greater than 0'),
     symbol: Yup.string().required("Symbol is required!")
   })
 
@@ -293,11 +307,33 @@ const handleSelectedCurrency = (value) => {
     initialValues,
     validationSchema,
     onSubmit: (values, { resetForm }) => {
-      setCustonCrypto(values)
+      const cleanedValues = {
+        ...values,
+        price: parseInt(values.price.replace(/,/g, '')),
+        circulating_supply: parseInt(values.circulating_supply.replace(/,/g, '')),
+      };
+      console.log(cleanedValues);
+      
+      setCustonCrypto(cleanedValues )
       resetForm()
       setIsModalOpen(false)
     }
   })
+
+  const handleChange = (e) => {
+    let fieldName = e.target.name
+
+    if (fieldName !== "symbol") {
+      let value = e.target.value;
+      
+      value = value.replace(/[^0-9,]/g, '');
+      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      
+      formik.setFieldValue(fieldName, value);
+    }else{
+      formik.setFieldValue(fieldName, e.target.value)
+    }
+  }
 
   /////////////////////////////// - end - Form handling ///////////////////////////////
 
@@ -379,8 +415,8 @@ const handleSelectedCurrency = (value) => {
                 }
             </div>
 
-            <div className='flex sm:flex-row flex-col items-center justify-center gap-7  w-full mt-6'>
-              <div className='flex w-full justify-between items-center gap-1 sm:max-w-[40%] max-w-[350px] rounded-md bg-[#23232E]'>
+            <div className='flex sm:flex-row flex-col items-center justify-center sm:gap-7 gap-3  w-full mt-6'>
+              <div className='relative flex w-full justify-between items-center gap-1 sm:max-w-[40%] max-w-[350px] rounded-md bg-[#23232E] mb-5'>
                 {/* <select className='outline-none w-2/3 lightGary flex-1 py-2 px-1 rounded-md'
                   name="currency"
                 >
@@ -397,17 +433,30 @@ const handleSelectedCurrency = (value) => {
                   selectedValue={selectedCrypto1}
                   onSelect={setSelectedCrypto1} 
                 />
-                <p className='pl-2 pr-3 text-sm font-medium break-all flex-1 text-right'>
+                <p className='pl-2 pr-3 text-sm font-medium break-all flex-1 text-right truncate  '>
                     <span className=''>{selectedCurrency?.code} </span>
                     {selectedCrypto1?.quote?.USD?.price && cryptoPrice(selectedCrypto1?.quote?.USD?.price) || '0.00'}
                 </p>
-              </div>
 
-              <button className='rotate-90 md:rotate-0' onClick={handleSwap}>
+                {/* custom button */}
+                <div className='absolute top-12 left-0'>
+                  <button 
+                    onClick={() => {
+                      setModalSide("left")                        
+                      setIsModalOpen(true)
+                    }}
+                    className='px-3 rounded-md hover:font-medium underline'
+                  >
+                    Add Custom Coin
+                  </button>
+                </div>
+              </div>
+              
+              <button className='rotate-90 md:rotate-0 mb-5' onClick={handleSwap}>
                 <img src={swapIcon} alt="swapIcon" className='min-w-5'  />
               </button>
               
-              <div className='flex w-full justify-between items-center gap-1 sm:max-w-[40%] max-w-[350px] rounded-md bg-[#23232E]'>
+              <div className='relative flex w-full justify-between items-center gap-1 sm:max-w-[40%] max-w-[350px] rounded-md bg-[#23232E] mb-5'>
         
                 <DropDown
                   isForCrypto={true}
@@ -416,10 +465,22 @@ const handleSelectedCurrency = (value) => {
                   selectedValue={selectedCrypto2}
                   onSelect={setSelectedCrypto2} 
                 />
-                <p className='pl-2 pr-3 text-sm font-medium  break-all flex-1 text-right'>
+                <p className='pl-2 pr-3 text-sm font-medium  break-all flex-1 text-right truncate'>
                   <span className=''>{selectedCurrency?.code} </span> 
                   {selectedCrypto2?.quote?.USD?.price && cryptoPrice(selectedCrypto2?.quote?.USD?.price) || '0.00'}
                 </p>
+
+                <div className='absolute top-12 left-0'>
+                  <button 
+                    onClick={() => {
+                      setModalSide("right")
+                      setIsModalOpen(true)
+                    }}
+                    className='px-3 rounded-md hover:font-medium underline'
+                  >
+                    Add Custom Coin
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -637,7 +698,7 @@ const handleSelectedCurrency = (value) => {
 
       {
         isModalOpen && (
-          <div className='fixed inset-0 z-50 bg-[black] bg-opacity-60 flex items-center justify-center'>
+          <div className='fixed inset-0 z-50 bg-[black] bg-opacity-60 flex items-center justify-center px-4'>
             <div className='relative bg-white rounded-lg p-3 max-w-[400px] w-full text-black'>
               <div 
                 onClick={() => {
@@ -654,10 +715,11 @@ const handleSelectedCurrency = (value) => {
                   <div className='flex flex-col'>
                     <label htmlFor="">Price</label>
                     <input
-                      type="number"
+                      type="text"
                       id="price"
+                      name="price"
                       value={formik.values.price}
-                      onChange={formik.handleChange}  
+                      onChange={handleChange}  
                       className={`border mt-1 px-2 py-1 border-black rounded outline-none 
                         focus:border-black focus:border-2
                         ${formik.touched.price && formik.errors.price ? 'border-red-500 border-2' : ''}
@@ -678,10 +740,11 @@ const handleSelectedCurrency = (value) => {
                   <div className='mt-4 flex flex-col'>
                     <label htmlFor="">Circulating Supply</label>
                     <input 
-                      type="number" 
+                      type="text" 
                       id="circulating_supply"
+                      name="circulating_supply"
                       value={formik.values.circulating_supply}
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                       className={`border mt-1 px-2 py-1 border-black rounded outline-none 
                         focus:border-black focus:border-2
                         ${formik.touched.circulating_supply && formik.errors.circulating_supply ? 'border-red-500 border-2' : ''}
@@ -704,8 +767,9 @@ const handleSelectedCurrency = (value) => {
                     <input
                       type="text"
                       id='symbol'
+                      name="symbol"
                       value={formik.values.symbol}
-                      onChange={formik.handleChange}
+                      onChange={handleChange}
                       className={`border mt-1 px-2 py-1 border-black rounded outline-none 
                         focus:border-black focus:border-2
                         ${formik.touched.symbol && formik.errors.symbol ? 'border-red-500 border-2' : ''}
