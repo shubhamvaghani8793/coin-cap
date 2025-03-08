@@ -23,11 +23,11 @@ const Converter = () => {
     useEffect(() => {
         const fetchCryptoAndCurrencyData = async () => {
             try {
-                const [cryptoResponse, currencyResponse] = await Promise.all([
-                    getAllCryptoList(),
-                    getCurrencyFlag()
-                ]);
-
+                // Fetch both API responses one by one using async/await
+                const cryptoResponse = await getAllCryptoList();
+                const currencyResponse = await getCurrencyFlag();
+    
+                // Handle the crypto data
                 if (cryptoResponse?.data) {
                     const cryptoList = cryptoResponse?.data?.data.map(item => ({
                         label: item.name,
@@ -36,26 +36,27 @@ const Converter = () => {
                         price: item.quote.USD.price
                     }));
                     setCryptoData(cryptoList);
-                    
+    
                     // Set initial crypto selection immediately after data is available
                     if (cryptoList.length > 0) {
                         setSelectedCrypto1(cryptoList[0]);
                     }
                 }
-
+    
+                // Handle the currency data
                 if (currencyResponse?.supported_codes) {
                     const currencyList = currencyResponse?.supported_codes?.map(([symbol, name]) => ({
                         label: name,
                         value: symbol
                     }));
                     setCurrencyOptions(currencyList);
-                    
+    
                     // If we need to set a currency option for the second dropdown
                     if (convertType === "2" && currencyList.length > 0) {
                         setSelectedCrypto2(currencyList[0]);
                     }
                 }
-
+    
                 // After both data types are loaded, set the second dropdown based on conversion type
                 if (cryptoResponse?.data && currencyResponse?.supported_codes) {
                     const cryptoList = cryptoResponse?.data?.data.map(item => ({
@@ -64,19 +65,19 @@ const Converter = () => {
                         id: item.id,
                         price: item.quote.USD.price
                     }));
-                    
+    
                     if (convertType === "1" && cryptoList.length > 1) {
                         setSelectedCrypto2(cryptoList[1]); // Set second crypto if available
                     } else if (convertType === "1" && cryptoList.length === 1) {
                         setSelectedCrypto2(cryptoList[0]); // Use first crypto if that's all we have
                     }
                 }
-
+    
             } catch (error) {
                 console.error("Error fetching crypto or currency data:", error);
             }
         };
-
+    
         fetchCryptoAndCurrencyData();
     }, []);
 
