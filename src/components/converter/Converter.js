@@ -28,8 +28,8 @@ const Converter = () => {
                     getCurrencyFlag()
                 ]);
 
-                if (cryptoResponse?.data?.data) {
-                    const cryptoList = cryptoResponse.data.data.map(item => ({
+                if (cryptoResponse?.data) {
+                    const cryptoList = cryptoResponse.data.map(item => ({
                         label: item.name,
                         value: item.symbol,
                         id: item.id,
@@ -57,8 +57,8 @@ const Converter = () => {
                 }
 
                 // After both data types are loaded, set the second dropdown based on conversion type
-                if (cryptoResponse?.data?.data && currencyResponse?.supported_codes) {
-                    const cryptoList = cryptoResponse.data.data.map(item => ({
+                if (cryptoResponse?.data && currencyResponse?.supported_codes) {
+                    const cryptoList = cryptoResponse.data.map(item => ({
                         label: item.name,
                         value: item.symbol,
                         id: item.id,
