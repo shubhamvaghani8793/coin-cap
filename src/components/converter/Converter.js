@@ -214,7 +214,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${from}/${to}/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${from}/${to}/${amount}`);
                 const data = await response.json();
 
                 if (data.conversion_result) {
@@ -234,7 +234,7 @@ const Converter = () => {
         const newTimer = setTimeout(async () => {
             try {
                 const response = await fetch(
-                    `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/USD/${toCurrency}/${amountInUsd}`
+                    `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/USD/${toCurrency}/${amountInUsd}`
                 );
                 const data = await response.json();
                 if (convertType === "2" && isSwapped) {
@@ -260,7 +260,7 @@ const Converter = () => {
                 const amount = parseFloat(value);
                 if (isSecondInput) {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -268,7 +268,7 @@ const Converter = () => {
                     }
                 } else {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -288,7 +288,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${fromCurrency}/USD/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/d6d5e60b40b6c58524841df1/pair/${fromCurrency}/USD/${amount}`);
                 const data = await response.json();
 
                 if (convertType === "2" && isSwapped) {

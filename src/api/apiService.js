@@ -11,7 +11,7 @@ const api  = axios.create({
 // get country currency symbol
 export const getCurrencyFlag = async () => {
     try {
-        const response = await api.get('/a89b68d4d19dcc0a50c3fd58/codes')
+        const response = await api.get('/d6d5e60b40b6c58524841df1/codes')
         return response.data;
     } catch (error) {
         throw error
@@ -20,7 +20,7 @@ export const getCurrencyFlag = async () => {
 
 export const getCurrencyRateData = async (flag) => {
     try {
-        const response = await api.get(`a89b68d4d19dcc0a50c3fd58/pair/USD/${flag}/1`)
+        const response = await api.get(`d6d5e60b40b6c58524841df1/pair/USD/${flag}/1`)
         return response.data
     } catch (error) {
         throw error
