@@ -8,28 +8,30 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
   const [inputField, setInputField] = useState(0);
   const [textField, setTextField] = useState('');
   const [profit, setProfit] = useState(0);
-
+ 
+  
   const getMarketCap = (value) => {
-
+    
     if (value >= 900_000_000_000_000){
       return '900T+'
     }
      else if (value >= 1_000_000_000_000 || value <= -1_000_000_000_000) {
-      return `${((parseInt((value / 1_000_000_000_000))).toLocaleString('en-US'))}T`;  
+      return `${(((value / 1_000_000_000_000).toFixed(2)).toLocaleString('en-US'))}T`;  
     } else if (value >= 1_000_000_000 || value <= -1_000_000_000) {
-      return `${(parseInt((value / 1_000_000_000))).toLocaleString('en-US')}B`; 
+      return `${(Math.ceil(value / 1_000_000_000)).toLocaleString('en-US')}B`; 
 
     } else if (value >= 1_000_000 || value <= -1_000_000) {
-      return `${(parseInt((value / 1_000_000))).toLocaleString('en-US')}M`; 
+      return `${(Math.ceil(value / 1_000_000)).toLocaleString('en-US')}M`; 
 
     } else {
       return value;  // For values smaller than a million
     }
   }
-
+  
   const getProfit = useMemo(() => {
 
     const value = (getXValue * inputField)
+    
     const valueStr = value.toString()
     const [integerPart] = valueStr?.split(".");
     setProfit(value)
@@ -38,7 +40,7 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
     }else{
       return `${value?.toLocaleString('en-US', { minimumFractionDigits: 3, maximumFractionDigits: 3})}`
     }
-  },[inputField])
+  },[inputField, getXValue])
 
   const handleAmountChange = (e) => {
     const data = e.target.value;
@@ -49,7 +51,23 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
     let numberText = Number(formattedValue.split(',').join(''))
     setInputField(numberText)
   }  
+
+  const expectedProfit = useMemo(() => {
+    const profitValue = parseInt(profit)
+    const inputValue = Number(inputField).toFixed(4)
+    const answer = profitValue - inputValue
+
+    const response = getMarketCap(answer).toLocaleString('en-US')
       
+    return response
+  },[profit, inputField])
+  
+  const getNewMarketCap = useMemo(() => {
+    const value = selectedCrypto2?.quote?.USD?.market_cap
+    const data = getMarketCap(value)
+    return data
+  },[selectedCrypto2])
+
   return (
     <div className='flex flex-col relative max-w-[1400px] mx-auto mt-[200px] items-center px-3'>
         
@@ -64,7 +82,7 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
             What will my current investment of
             <span> {selectedCrypto1 && selectedCrypto1?.code} </span>
             be at a 
-            <span className='text-brandOrange font-semibold'> ${selectedCrypto2 && getMarketCap(selectedCrypto2?.quote?.USD?.market_cap)} </span>  
+            <span className='text-brandOrange font-semibold'> ${selectedCrypto2 && getNewMarketCap || 0} </span>  
             Market Cap?
         </p>
     
@@ -92,14 +110,16 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
         </div>
         <div className='flex flex-col sm:flex-row items-center sm:align-items-unset justify-center mt-12 w-full sm:justify-around max-w-[800px]'>       
             <div className='flex flex-col items-center justify-center text-center w-fit flex-1'>   
-                <p className='sm:text-4xl text-3xl font-semibold mb-2 text-brandOrange px-4 max-w-[450px] break-all'>{`${selectedCurrency?.code || '$'} `}{`${((getMarketCap(parseInt(profit) - Number(inputField).toFixed(4))).toLocaleString('en-US'))}`}</p>
+                <p className='sm:text-4xl text-3xl font-semibold mb-2 text-brandOrange px-4 max-w-[450px] break-all'>{`${selectedCurrency?.code || '$'} `}{`${expectedProfit || 0}`}</p>
                 <p className='font-semibold'>Expected Profit</p>
             </div>
 
             <div className='flex flex-col items-center my-7 py-7 justify-center border-t-2 sm:border-t-0 sm:border-b-0 border-b-2 sm:border-l-2 sm:border-r-2 border-[#a0a0a0] text-center w-[95%] sm:w-fit flex-1'>   
-                <p className='sm:text-4xl text-3xl font-semibold mb-2 text-brandOrange px-4 '>{`
-                  ${(isNaN(parseInt(((parseInt(profit) - Number(inputField).toFixed(4)) / inputField) * 100)) 
-                    ? 0 : parseInt(((parseInt(profit) - Number(inputField).toFixed(4)) / inputField) * 100)).toLocaleString('en-US') || 0}`}%</p>
+                <p className='sm:text-4xl text-3xl font-semibold mb-2 text-brandOrange px-4 '>
+                {isNaN(profit) || isNaN(inputField) || inputField === 0
+                  ? '0%'
+                  : `${Number(((parseInt(profit) / inputField) * 100).toFixed(2)).toLocaleString('en-US')}%`}
+                </p>
                 <p className='font-semibold'>Rate of Return</p>
             </div>
 

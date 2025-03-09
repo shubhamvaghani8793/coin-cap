@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from '../navbar/Navbar'
-import bitcoinIcon from '../../assets/Bitcoin-1.svg'
-import etheriumIcon from '../../assets/Etherium.svg'
+import bitcoinIcon from '../../assets/Bitcoin-1.png'
+import etheriumIcon from '../../assets/Etherium.png'
 import star_1 from '../../assets/star-img.svg'
 import star_2 from '../../assets/star-img-2.svg'
 import star_3 from '../../assets/star-img-3.svg'
-import coin_1 from '../../assets/coin-1.svg'
-import coin_2 from '../../assets/coin-2.svg'
-import coin_3 from '../../assets/coin-3.svg'
-import coin_4 from '../../assets/coin-5.svg'
-import usa_flag from '../../assets/usa-flag.svg'
+import coin_1 from '../../assets/coin-1.png'
+import coin_2 from '../../assets/coin-2.png'
+import coin_3 from '../../assets/coin-3.png'
+import coin_4 from '../../assets/coin-5.png'
 import swapIcon from '../../assets/changeIcon.svg'
 import bitcoin_sm from '../../assets/bitcoin-sm.svg'
 import ProjectedGrowth from '../projectedGrowth/ProjectedGrowth'
@@ -200,7 +199,8 @@ const handleSelectedCurrency = (value) => {
       const field1 = selectedCrypto2?.quote?.USD?.market_cap;
       const field2 = selectedCrypto1?.circulating_supply;
       let value = field1 / field2;
-      const answer = value / selectedCrypto1?.quote?.USD?.price;
+      let answer = (value / selectedCrypto1?.quote?.USD?.price);
+      
       return answer;
     }
 
@@ -312,7 +312,6 @@ const handleSelectedCurrency = (value) => {
         price: parseInt(values.price.replace(/,/g, '')),
         circulating_supply: parseInt(values.circulating_supply.replace(/,/g, '')),
       };
-      console.log(cleanedValues);
       
       setCustonCrypto(cleanedValues )
       resetForm()
@@ -328,7 +327,7 @@ const handleSelectedCurrency = (value) => {
       
       value = value.replace(/[^0-9,]/g, '');
       value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      
+   
       formik.setFieldValue(fieldName, value);
     }else{
       formik.setFieldValue(fieldName, e.target.value)
@@ -367,17 +366,17 @@ const handleSelectedCurrency = (value) => {
           <img src='converterbg1.png' alt='' className='absolute top-0 left-0 h-80 -z-50 md:h-auto' />
           <img src='converterbg2.png' alt='' className='absolute top-0 right-0 h-80 -z-50 md:h-auto w-[300px]' />
 
-        <div className='relative -z-50'>
-          <img className='free-coin left-[70px] opacity-[0.3] sm:opacity-[0.8] lg:opacity-[1]' src={bitcoinIcon} alt="bitcoin" />
-          <img className='absolute w-10 left-[170px] top-28 opacity-[0.8] lg:opacity-[1]' src={star_3} alt="bitcoin" />
-          <img className='absolute w-14 -left-[20px] top-[40vh] opacity-[0.8] lg:opacity-[1]' src={coin_1} alt="coin-1" />
-          <img className='absolute w-20 left-[60px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={coin_2} alt="coin-2" />
-          <img className='absolute w-16 sm:-right-[30px] right-[0px] top-[30vh] opacity-[0.8] lg:opacity-[1]' src={coin_3} alt="coin-3" />
-          <img className='absolute w-20 sm:-right-[2  0px] right-[0px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={etheriumIcon} alt="etheriumIcon" />
-          <img className='absolute w-20 right-[100px] top-[100px] opacity-[0.8] lg:opacity-[1]' src={coin_4} alt="coin-4" />
-          <img className='absolute w-10 right-[190px] top-[50px] opacity-[0.8] lg:opacity-[1]' src={star_2} alt="star_2" />
-          <img className='absolute right-[200px] top-[60vh] opacity-[0.8] lg:opacity-[1]' src={star_3} alt="star_3" />
-          <img className='absolute w-16 right-[240px] top-[10px] hidden sm:block opacity-[0.8] lg:opacity-[1]' src={star_1} alt="star_3" />
+        <div className='relative -z-50 hidden sm:block'>
+          <img className='free-coin left-[70px] opacity-[0.3] sm:opacity-[0.8] lg:opacity-[1] -z-50' src={bitcoinIcon} alt="bitcoin" />
+          <img className='absolute w-10 left-[170px] top-28 opacity-[0.8] lg:opacity-[1] -z-50' src={star_3} alt="bitcoin" />
+          <img className='absolute w-14 -left-[20px] top-[40vh] opacity-[0.8] lg:opacity-[1] -z-50' src={coin_1} alt="coin-1" />
+          <img className='absolute w-20 left-[60px] top-[60vh] opacity-[0.8] lg:opacity-[1] -z-50' src={coin_2} alt="coin-2" />
+          <img className='absolute w-16 sm:-right-[30px] right-[0px] top-[30vh] opacity-[0.8] lg:opacity-[1] -z-50' src={coin_3} alt="coin-3" />
+          <img className='absolute w-20 sm:-right-[2  0px] right-[0px] top-[60vh] opacity-[0.8] lg:opacity-[1] -z-50' src={etheriumIcon} alt="etheriumIcon" />
+          <img className='absolute w-20 right-[100px] top-[100px] opacity-[0.8] lg:opacity-[1] -z-50' src={coin_4} alt="coin-4" />
+          <img className='absolute w-10 right-[190px] top-[50px] opacity-[0.8] lg:opacity-[1] -z-50' src={star_2} alt="star_2" />
+          <img className='absolute right-[200px] top-[60vh] opacity-[0.8] lg:opacity-[1] -z-50' src={star_3} alt="star_3" />
+          <img className='absolute w-16 right-[240px] top-[10px] hidden sm:block opacity-[0.8] lg:opacity-[1] -z-50' src={star_1} alt="star_3" />
         </div>
 
         <section className='flex flex-col max-w-[1400px] mx-auto items-center px-3'>
@@ -385,7 +384,7 @@ const handleSelectedCurrency = (value) => {
             Crypto <span className='text-brandOrange'>Market cap</span> Calculator
           </h1>
 
-          <div className='w-full py-8 px-2 bg-[#1d1d1d] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9'>   
+          <div className='w-full py-8 px-2 bg-[#67676733] flex flex-col items-center border border-[#676767] rounded-md max-w-[800px] mt-9'>   
            
             <div className='relative'>
                 <DropDown

@@ -14,7 +14,7 @@
       } else if (value >= 1_000_000_000) {
         return `${Math.ceil(value / 1_000_000_000)}B`;  // Billions
       } else if (value >= 1_000_000) {
-        return `${(value / 1_000_000).toFixed(2)}M`;  // Millions
+        return `${Math.ceil(value / 1_000_000)}M`;  // Millions
       } else {
         return value.toString();  // For values smaller than a million
       }
