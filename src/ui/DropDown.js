@@ -59,7 +59,7 @@
               {...props.innerProps}
               ref={props.innerRef}
               onScroll={handleScroll}
-              style={{ overflowY: 'auto', maxHeight: '100px' }}
+              style={{ overflowY: 'auto', minHeight: '200px', maxHeight: '200px', WebkitOverflowScrolling: 'touch'}}
           >
               {props.children}
           </div>
@@ -84,7 +84,6 @@
         <Select
           options={displayedOptionsWithSearch}
           value={selectedValue}
-          
           onMenuScrollToBottom={handleScroll}
           menuList={customMenuList}
           onChange={onSelect}
