@@ -42,7 +42,9 @@
 
     useEffect(() => {
         // Initially load 10 options
-        loadMoreOptions();
+        // loadMoreOptions();
+        
+        setDisplayedOptions(options || [])
     }, [options]);
 
     const handleScroll = (e) => {
@@ -70,11 +72,11 @@
     if (isForCrypto) {
       filteredOptions = options?.filter(option => 
             option?.label?.toLowerCase()?.includes(searchInput?.toLowerCase())
-          ).slice(0, 10);
+          );
     }else{
       filteredOptions = options?.filter(option => 
             option?.value?.toLowerCase()?.includes(searchInput?.toLowerCase())
-          ).slice(0, 10);
+          );
     }
   
     const displayedOptionsWithSearch = searchInput ? filteredOptions : displayedOptions;
