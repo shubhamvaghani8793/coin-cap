@@ -379,7 +379,7 @@ const handleSelectedCurrency = (value) => {
           <img className='absolute w-16 right-[240px] top-[10px] hidden sm:block opacity-[0.8] lg:opacity-[1] -z-50' src={star_1} alt="star_3" />
         </div>
 
-        <section className='flex flex-col max-w-[1400px] mx-auto items-center px-3'>
+        <section className='flex flex-col max-w-[1400px] mx-auto items-center px-3 sm:mt-0 mt-6'>
           <h1 className='text-3xl sm:text-5xl md:text-7xl font-semibold max-w-2xl text-center mt-8 transition'>
             Crypto <span className='text-brandOrange'>Market cap</span> Calculator
           </h1>

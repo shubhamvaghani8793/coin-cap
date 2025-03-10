@@ -22,8 +22,16 @@ const Sidebar = () => {
   return (
     <div className="relative md:hidden z-10 py-5">
       {/* Sidebar Toggle Button */}
+
+      <NavLink to="/" className="flex gap-1 items-center mb-3 mt-0 top-4 absolute left-1">
+        <img className="h-9 w-9" src={logo} alt="logo" />
+        <h2 className="font-bold text-lg">
+          <span className="text-brandOrange">Coin Cap</span> Converter
+        </h2>
+      </NavLink>
+
       <button
-        className="text-white absolute right-0 p-3 focus:outline-none"
+        className="text-white absolute right-0 p-3 pt-1 focus:outline-none"
         onClick={() => setIsOpen(true)}
       >
         {!isOpen && <FaBars size={24} />}
