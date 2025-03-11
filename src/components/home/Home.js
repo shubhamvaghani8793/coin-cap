@@ -446,7 +446,7 @@ const handleSelectedCurrency = (value) => {
                     }}
                     className='px-3 rounded-md hover:font-medium underline'
                   >
-                    Add Custom Coin
+                    Add Custom Value
                   </button>
                 </div>
               </div>
@@ -477,7 +477,7 @@ const handleSelectedCurrency = (value) => {
                     }}
                     className='px-3 rounded-md hover:font-medium underline'
                   >
-                    Add Custom Coin
+                    Add Custom Value
                   </button>
                 </div>
               </div>
