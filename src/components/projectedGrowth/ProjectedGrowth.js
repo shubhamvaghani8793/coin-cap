@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selectedCurrency, currencyFlag}) {
@@ -12,6 +12,9 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
   
   const getMarketCap = (value) => {
     
+    if (value <= -900_000_000_000_000) {
+       return '-900T+'
+    }
     if (value >= 900_000_000_000_000){
       return '900T+'
     }
@@ -68,6 +71,42 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
     return data
   },[selectedCrypto2])
 
+  const isProfit = useRef(true);
+
+  const PositiveNegative = () => {
+    const coin1 = (selectedCrypto1?.quote?.USD?.market_cap 
+      / selectedCrypto2?.quote?.USD?.market_cap
+     ) * 100
+    
+    const coin2 = (selectedCrypto2?.quote?.USD?.market_cap 
+      / selectedCrypto1?.quote?.USD?.market_cap
+     ) * 100
+
+     
+     if (coin1 > coin2) {
+      isProfit.current = false
+    }else{
+      isProfit.current = true
+    }
+  } 
+
+  useEffect(() => {
+    PositiveNegative();
+  }, [selectedCrypto1, selectedCrypto2])
+  
+  const getRateOfReturn = useMemo(() => {
+    const newProfit = parseInt(profit)
+    
+    if (!isProfit.current) {
+      const expectedProfit = newProfit - inputField
+      const result = ((expectedProfit / inputField) * 100).toFixed(2)
+      return result || 0
+    }else{
+      const positiveValue = ((newProfit / inputField) * 100).toFixed(2)
+      return positiveValue || 0
+    }
+  },[inputField, profit, isProfit.current])
+
   return (
     <div className='flex flex-col relative max-w-[1400px] mx-auto mt-[200px] items-center px-3'>
         
@@ -118,7 +157,7 @@ function ProjectedGrowth({selectedCrypto1, selectedCrypto2, getXreturn2, selecte
                 <p className='sm:text-4xl text-3xl font-semibold mb-2 text-brandOrange px-4 '>
                 {isNaN(profit) || isNaN(inputField) || inputField === 0
                   ? '0%'
-                  : `${Number(((parseInt(profit) / inputField) * 100).toFixed(2)).toLocaleString('en-US')}%`}
+                  : `${Number(getRateOfReturn).toLocaleString('en-US')}%`}
                 </p>
                 <p className='font-semibold'>Rate of Return</p>
             </div>
