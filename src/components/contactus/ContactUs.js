@@ -12,9 +12,9 @@ const ContactUs = () => {
                     <p className='sm:text-left text-3xl text-white text-center font-semibold max-w-[800px] w-full lg:mx-w-[800px] lg:text-[50px] lg:leading-[50px]'>Get It On The <span className='bg-gradient-to-r from-[#F3510D] to-[#F67611] bg-clip-text text-transparent'>Crypto Action</span></p>
 
                     <div className="flex justify-between mt-5 lg:mt-10 w-72 sm:w-full">
-                        <Link to="https://x.com/Coincapconvert"><img src='x.svg' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
-                        <Link to=""><img src='tiktok.svg' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
-                        <Link to="https://www.instagram.com/coincapconvert/"><img src='instagram.svg' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
+                        <Link to="https://x.com/Coincapconvert"><img src='x.png' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
+                        <Link to=""><img src='tiktok.png' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
+                        <Link to="https://www.instagram.com/coincapconvert/"><img src='instagram.png' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
                         <Link to="www.youtube.com/@Coincapconvert"><img src='youtube.png' alt='' className='h-[35px] w-[35px] lg:h-[46px] lg:w-[46px]' /></Link>
                     </div>
                 </div>
