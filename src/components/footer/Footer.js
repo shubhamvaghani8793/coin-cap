@@ -39,20 +39,25 @@ function Footer() {
             <h3 className="text-white text-2xl font-bold">Download App</h3>
             <div className='mt-3 md:mt-6 flex flex-col gap-2'>
 
-              <div className='w-[181px] p-3 rounded-xl flex items-center gap-5 bg-white py-2 md:py-3'>
-                <img src="playstore.svg" alt="Google Play" className='h-7 w-7 md:h-9 md:w-9' />
-                <div className='text-start'>
-                  <p className='text-black text-[10px] font-semibold'>Get it On</p>
-                  <p className='text-black text-lg font-semibold'>Google Play</p>
+              <a href="https://play.google.com/store/apps/details?id=com.coincap.coincapconverterapp">
+                <div className='w-[181px] p-3 rounded-xl flex items-center gap-5 bg-white py-2 md:py-3'>
+                  <img src="playstore.svg" alt="Google Play" className='h-7 w-7 md:h-9 md:w-9' />
+                  <div className='text-start'>
+                    <p className='text-black text-[10px] font-semibold'>Get it On</p>
+                    <p className='text-black text-lg font-semibold'>Google Play</p>
+                  </div>
                 </div>
-              </div>
-              <div className='w-[181px] p-3 rounded-xl flex items-center gap-5 bg-white py-2 md:py-3'>
-                <img src="appstore.svg" alt="Google Play" className='h-7 w-7 md:h-9 md:w-9' />
-                <div className='text-start'>
-                  <p className='text-black text-[10px] font-semibold'>Download On The</p>
-                  <p className='text-black text-xl font-semibold'>App Store</p>
+              </a>
+
+              <a href="https://apps.apple.com/us/app/id/6742189501">
+                <div className='w-[181px] p-3 rounded-xl flex items-center gap-5 bg-white py-2 md:py-3'>
+                  <img src="appstore.svg" alt="Google Play" className='h-7 w-7 md:h-9 md:w-9' />
+                  <div className='text-start'>
+                    <p className='text-black text-[10px] font-semibold'>Download On The</p>
+                    <p className='text-black text-xl font-semibold'>App Store</p>
+                  </div>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </div>
