@@ -145,13 +145,13 @@ const handleSelectedCurrency = (value) => {
 
   useEffect(() => {
     if(selectedCurrency){
-        // getCurrencyRate(selectedCurrency?.code)
+        getCurrencyRate(selectedCurrency?.code)
     }
   }, [selectedCurrency])
   
   useEffect(() => {
-    // getCurrency()
-    // modifiedData()
+    getCurrency()
+    modifiedData()
   },[])
 
   /////////////////////////////////////////        Api Call         ///////////////////////////////////  
