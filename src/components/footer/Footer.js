@@ -68,10 +68,10 @@ function Footer() {
           </p>
 
           <div className="flex justify-center gap-4 mt-5 sm:mt-0">
-            <NavLink to="https://x.com/Coincapconvert"><img src='x.svg' alt='' /></NavLink>
-            <NavLink to=""><img src='tiktok.svg' alt='' /></NavLink>
-            <NavLink to="https://www.instagram.com/coincapconvert/"><img src='instagram.svg' alt='' /></NavLink>
-            <NavLink to="www.youtube.com/@Coincapconvert"><img src='youtube.png' alt='' /></NavLink>
+            <NavLink to="https://x.com/Coincapconvert" target="_blank"><img src='x.png' alt='x' className='w-8 h-8'/></NavLink>
+            <NavLink to="https://www.tiktok.com/@coincapconvert?lang=en" target="_blank"><img src='tiktok.png' alt='tiktok' className='w-8 h-8'/></NavLink>
+            <NavLink to="https://www.instagram.com/coincapconvert/" target="_blank"><img src='instagram.png' alt='imstagram' className='w-8 h-8' /></NavLink>
+            <NavLink to="https://www.youtube.com/@Coincapconvert" target="_blank"><img src='youtube.png' alt='youtube' className='w-8 h-8'/></NavLink>
           </div>
         </div>
         </div>
