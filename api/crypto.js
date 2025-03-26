@@ -4,7 +4,7 @@ module.exports = async (req, res) => {
   // Allow requests only from your GoDaddy domain
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://your-godaddy-domain.com"
+    "https://coincapconvert.com"
   );
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
       "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=1000&cryptocurrency_type=all&tag=all",
       {
         headers: {
-          "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY, // Use environment variable
+          "X-CMC_PRO_API_KEY": '168f6bde-5161-4680-849f-a949d9cc3846',
         },
       }
     );
