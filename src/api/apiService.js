@@ -28,15 +28,11 @@ export const getCurrencyRateData = async (flag) => {
 }
 
 const url = 'https://coin-cap-eight.vercel.app/api/crypto'
-const apiKey = process.env.REACT_APP_CMC_API_KEY;
+//const apiKey = process.env.REACT_APP_CMC_API_KEY;
 
 export const getAllCryptoList = async () => {
     try {
-        const response = await axios.get(url, {
-            headers: {
-                'X-CMC_PRO_API_KEY': apiKey
-            }
-        })
+        const response = await axios.get(url)
 
         return response;
     } catch (error) {
