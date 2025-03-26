@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     "https://coincapconvert.com"
   );
   res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CMC_PRO_API_KEY");
 
   // Handle CORS preflight request
   if (req.method === "OPTIONS") {
