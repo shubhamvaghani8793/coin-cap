@@ -23,60 +23,61 @@ const Converter = () => {
     useEffect(() => {
         const fetchCryptoAndCurrencyData = async () => {
             try {
-                const [cryptoResponse, currencyResponse] = await Promise.all([
-                    getAllCryptoList(),
-                    getCurrencyFlag()
-                ]);
-
+                // Fetch both API responses one by one using async/await
+                const cryptoResponse = await getAllCryptoList();
+                const currencyResponse = await getCurrencyFlag();
+    
+                // Handle the crypto data
                 if (cryptoResponse?.data) {
-                    const cryptoList = cryptoResponse.data.map(item => ({
+                    const cryptoList = cryptoResponse?.data?.data.map(item => ({
                         label: item.name,
                         value: item.symbol,
                         id: item.id,
                         price: item.quote.USD.price
                     }));
                     setCryptoData(cryptoList);
-                    
+    
                     // Set initial crypto selection immediately after data is available
                     if (cryptoList.length > 0) {
                         setSelectedCrypto1(cryptoList[0]);
                     }
                 }
-
+    
+                // Handle the currency data
                 if (currencyResponse?.supported_codes) {
-                    const currencyList = currencyResponse.supported_codes.map(([symbol, name]) => ({
+                    const currencyList = currencyResponse?.supported_codes?.map(([symbol, name]) => ({
                         label: name,
                         value: symbol
                     }));
                     setCurrencyOptions(currencyList);
-                    
+    
                     // If we need to set a currency option for the second dropdown
                     if (convertType === "2" && currencyList.length > 0) {
                         setSelectedCrypto2(currencyList[0]);
                     }
                 }
-
+    
                 // After both data types are loaded, set the second dropdown based on conversion type
                 if (cryptoResponse?.data && currencyResponse?.supported_codes) {
-                    const cryptoList = cryptoResponse.data.map(item => ({
+                    const cryptoList = cryptoResponse?.data?.data.map(item => ({
                         label: item.name,
                         value: item.symbol,
                         id: item.id,
                         price: item.quote.USD.price
                     }));
-                    
+    
                     if (convertType === "1" && cryptoList.length > 1) {
                         setSelectedCrypto2(cryptoList[1]); // Set second crypto if available
                     } else if (convertType === "1" && cryptoList.length === 1) {
                         setSelectedCrypto2(cryptoList[0]); // Use first crypto if that's all we have
                     }
                 }
-
+    
             } catch (error) {
                 console.error("Error fetching crypto or currency data:", error);
             }
         };
-
+    
         fetchCryptoAndCurrencyData();
     }, []);
 
@@ -213,7 +214,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${from}/${to}/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/ad3cf87e40fd09b87f3c5e71/pair/${from}/${to}/${amount}`);
                 const data = await response.json();
 
                 if (data.conversion_result) {
@@ -233,7 +234,7 @@ const Converter = () => {
         const newTimer = setTimeout(async () => {
             try {
                 const response = await fetch(
-                    `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/USD/${toCurrency}/${amountInUsd}`
+                    `https://v6.exchangerate-api.com/v6/ad3cf87e40fd09b87f3c5e71/pair/USD/${toCurrency}/${amountInUsd}`
                 );
                 const data = await response.json();
                 if (convertType === "2" && isSwapped) {
@@ -259,7 +260,7 @@ const Converter = () => {
                 const amount = parseFloat(value);
                 if (isSecondInput) {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/ad3cf87e40fd09b87f3c5e71/pair/${selectedCrypto2.value}/${selectedCrypto1.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -267,7 +268,7 @@ const Converter = () => {
                     }
                 } else {
                     const response = await fetch(
-                        `https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
+                        `https://v6.exchangerate-api.com/v6/ad3cf87e40fd09b87f3c5e71/pair/${selectedCrypto1.value}/${selectedCrypto2.value}/${amount}`
                     );
                     const data = await response.json();
                     if (data.conversion_result) {
@@ -287,7 +288,7 @@ const Converter = () => {
 
         const newTimer = setTimeout(async () => {
             try {
-                const response = await fetch(`https://v6.exchangerate-api.com/v6/a89b68d4d19dcc0a50c3fd58/pair/${fromCurrency}/USD/${amount}`);
+                const response = await fetch(`https://v6.exchangerate-api.com/v6/ad3cf87e40fd09b87f3c5e71/pair/${fromCurrency}/USD/${amount}`);
                 const data = await response.json();
 
                 if (convertType === "2" && isSwapped) {
